@@ -1,5 +1,7 @@
 package leetcode
 
+import "math"
+
 func max(a, b int) int {
 	if a > b {
 		return a
@@ -19,4 +21,8 @@ func abs(a int) int {
 		return a
 	}
 	return -a
+}
+
+func power(x, y int) int {
+	return int(math.Pow(float64(x), float64(y)))
 }

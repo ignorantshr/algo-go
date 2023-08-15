@@ -76,7 +76,7 @@ type Solution struct {
 	replacelist map[int]int
 }
 
-func Constructor(n int, blacklist []int) Solution {
+func Constructor710(n int, blacklist []int) Solution {
 	tail := make(map[int]int, len(blacklist))
 	s := Solution{n - len(blacklist), make(map[int]int, len(blacklist))}
 	for _, v := range blacklist {
@@ -122,7 +122,7 @@ func TestConstructor710(t *testing.T) {
 		blackmap[v] = struct{}{}
 	}
 
-	s := Constructor(n, list)
+	s := Constructor710(n, list)
 	for i := 0; i < 10; i++ {
 		v := s.Pick()
 		if _, ok := blackmap[v]; ok {
