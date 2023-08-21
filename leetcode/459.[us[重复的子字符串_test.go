@@ -20,27 +20,64 @@
 */
 package leetcode
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 // @lc code=start
 func repeatedSubstringPattern(s string) bool {
+	return repeatedSubstringPatternKMP(s)
+}
+
+func repeatedSubstringPatternKMP(s string) bool {
 	size := len(s)
-	mid := size / 2
+	if size == 0 {
+		return false
+	}
+
+	// next[i] 表示 i（包括i）之前最长相等的前后缀长度，前缀不包含最后一个字符，后缀不包含第一个字符
+	next := prefixTable(s)
+	if next[size-1] != 0 && size%(size-next[size-1]) == 0 {
+		return true
+	}
+
+	return false
+}
+
+// 前缀表
+func prefixTable(s string) []int {
+	j := 0
+	res := make([]int, len(s))
+	res[0] = j
+	for i := 1; i < len(s); i++ {
+		for j > 0 && s[i] != s[j] {
+			j = res[j-1]
+		}
+		if s[i] == s[j] {
+			j++
+		}
+		res[i] = j
+	}
+	return res
+}
+
+func repeatedSubstringPatternSymmetry(s string) bool {
+	size := len(s)
 	if size&1 == 1 {
 		if size == 1 {
 			return false
 		}
-		midv := s[mid]
-		mid++
-		for i := 0; mid < size; i++ {
-			if s[i] != s[mid] || s[i] != midv || s[mid] != midv {
+		// 奇数只对应一种情况
+		for i := 1; i < size; i++ {
+			if s[i] != s[i-1] {
 				return false
 			}
-			mid++
 		}
 		return true
 	}
 
+	mid := size / 2
 	for i := 0; mid < size; i++ {
 		if s[i] != s[mid] {
 			return false
@@ -58,6 +95,7 @@ func Test_substr(t *testing.T) {
 		s    string
 		want bool
 	}{
+		{"1", "aabaaf", false},
 		{"1", "abc", false},
 		{"1", "b", false},
 		{"1", "aa", true},
@@ -69,6 +107,24 @@ func Test_substr(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := repeatedSubstringPattern(tt.s); got != tt.want {
 				t.Errorf("substr() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_prefixTable(t *testing.T) {
+	tests := []struct {
+		name string
+		s    string
+		want []int
+	}{
+		{"1", "aabaaf", []int{0, 1, 0, 1, 2, 0}},
+		{"1", "abcabc", []int{0, 0, 0, 1, 2, 3}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := prefixTable(tt.s); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("prefixTable() = %v, want %v", got, tt.want)
 			}
 		})
 	}
