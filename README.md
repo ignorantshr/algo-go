@@ -8,5 +8,6 @@
 
 文件标记：
 
-- rv: 复习
-- us: 未提交到 LeetCode 进行验证
+- rv: review, 复习
+- us: un-committed, 未提交到 LeetCode 进行验证
+- dk: don't know, 不懂

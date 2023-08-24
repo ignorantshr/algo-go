@@ -79,7 +79,7 @@ import (
 )
 
 // @lc code=start
-func removeDuplicates(nums []int) int {
+func removeDuplicates26(nums []int) int {
 	size := len(nums)
 	if size == 0 {
 		return 0
@@ -123,7 +123,7 @@ func removeDuplicates1(nums []int) int {
 
 // @lc code=end
 
-func Test_removeDuplicates(t *testing.T) {
+func Test_removeDuplicates26(t *testing.T) {
 	type result struct {
 		nums []int
 		size int
@@ -142,8 +142,8 @@ func Test_removeDuplicates(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := removeDuplicates(tt.nums); got != tt.result.size || !reflect.DeepEqual(tt.nums[:tt.result.size], tt.result.nums) {
-				t.Errorf("removeDuplicates() = %v, want %v", got, tt.result)
+			if got := removeDuplicates26(tt.nums); got != tt.result.size || !reflect.DeepEqual(tt.nums[:tt.result.size], tt.result.nums) {
+				t.Errorf("removeDuplicates26() = %v, want %v", got, tt.result)
 			}
 		})
 	}

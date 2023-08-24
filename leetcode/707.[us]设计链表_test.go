@@ -25,7 +25,7 @@ type MyLinkedList struct {
 }
 
 /** Initialize your data structure here. */
-func Constructor() MyLinkedList {
+func Constructor707() MyLinkedList {
 	return MyLinkedList{
 		nil,
 		nil,
@@ -134,8 +134,8 @@ func (this *MyLinkedList) walk() {
 	fmt.Printf(" {%v,%v}[%d]\n", this.head, this.tail, this.length)
 }
 
-func TestConstructor707(t *testing.T) {
-	l := Constructor()
+func TestConstructor707707(t *testing.T) {
+	l := Constructor707()
 	l.AddAtHead(2)
 	l.walk()
 	l.AddAtHead(1)
