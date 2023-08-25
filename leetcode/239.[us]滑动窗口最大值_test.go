@@ -39,26 +39,21 @@ func maxSlidingWindow(nums []int, k int) []int {
 	return res
 }
 
-// 优先队列
+// 单调队列
 // 保持队列内元素逆序排序
 type sortedQueue struct {
 	list []int
 }
 
 func (s *sortedQueue) push(x int) {
-	for len(s.list) > 0 {
-		if s.list[len(s.list)-1] >= x {
-			break
-		}
+	for len(s.list) > 0 && s.list[len(s.list)-1] < x {
 		s.list = s.list[:len(s.list)-1]
 	}
 	s.list = append(s.list, x)
 }
 
-func (s *sortedQueue) pop() int {
-	res := s.list[0]
+func (s *sortedQueue) pop() {
 	s.list = s.list[1:]
-	return res
 }
 
 func (s *sortedQueue) front() int {
