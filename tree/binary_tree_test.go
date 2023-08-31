@@ -46,7 +46,23 @@ func TestDFS(t *testing.T) {
 
 	dfs(newBinaryTree(t), 2)
 	println()
-	postres := dfsPostorderTraversal(newBinaryTree(t))
+	postres := postorderTraversal1(newBinaryTree(t))
 	fmt.Println(postres)
+}
 
+func Test_preorderIterate(t *testing.T) {
+	fmt.Println("-------- v1 ---------")
+	fmt.Println(preorderTraversal1(newBinaryTree(t)))
+	fmt.Println(preorderTraversal2(newBinaryTree(t)))
+	fmt.Println(preorderTraversal3(newBinaryTree(t)))
+
+	fmt.Println("-------- v2 ---------")
+	fmt.Println(inorderTraversal1(newBinaryTree(t)))
+	fmt.Println(mirrorsDfsInOrder(newBinaryTree(t)))
+	fmt.Println(inorderTraversal3(newBinaryTree(t)))
+
+	fmt.Println("-------- v3 ---------")
+	fmt.Println(postorderTraversal1(newBinaryTree(t)))
+	fmt.Println(postorderTraversal2(newBinaryTree(t)))
+	fmt.Println(postorderTraversal3(newBinaryTree(t)))
 }

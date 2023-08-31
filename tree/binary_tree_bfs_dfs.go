@@ -1,6 +1,8 @@
 package tree
 
-import "container/list"
+import (
+	"container/list"
+)
 
 // 广度优先遍历
 func bfs(root TreeNode) {
@@ -69,55 +71,6 @@ func dfsNodes(root *node, order int) []*node {
 		res = append(res, root)
 	}
 	return res
-}
-
-// 迭代版本
-func dfsIterate(root *node) []int {
-	var res []int
-	stack := make([]*node, 0)
-	for root != nil || len(stack) > 0 {
-		for root != nil {
-			// 前序遍历位置
-			stack = append(stack, root)
-			root = root.left
-		}
-		peek := stack[len(stack)-1]
-		// 中序遍历位置
-		stack = stack[:len(stack)-1]
-		root = peek.right
-	}
-	return res
-}
-
-// 后序遍历 迭代版本
-func dfsPostorderTraversal(root *node) []int {
-	if root == nil {
-		return []int{}
-	}
-	result := []int{}
-	stack := []*node{}
-	var lastVisited *node
-
-	for root != nil || len(stack) > 0 {
-		for root != nil {
-			stack = append(stack, root)
-			root = root.left
-		}
-
-		peek := stack[len(stack)-1]
-
-		// 如果当前节点没有右子节点或者上一次访问的节点是当前节点的右子节点，那么我们就可以访问当前节点。
-		// 否则，说明当前节点的右子树还未被完全遍历，需要先处理右子树。
-		if peek.right != nil && lastVisited != peek.right {
-			root = peek.right
-		} else {
-			result = append(result, peek.value)
-			lastVisited = peek
-			stack = stack[:len(stack)-1]
-		}
-	}
-
-	return result
 }
 
 // mirrorsDfsInOrder 是一个 mirrors 遍历算法，用于进行中序遍历
