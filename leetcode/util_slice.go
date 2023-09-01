@@ -1,21 +1,27 @@
 package leetcode
 
-import "sort"
+type comareEle interface {
+	int | string
+}
 
 // 集合相等
-func equalSet(a, b []int) bool {
+func equalSet[T comareEle](a, b []T) bool {
 	if len(a) != len(b) {
 		return false
 	}
 
-	a1 := make([]int, len(a))
-	b1 := make([]int, len(b))
-	copy(a1, a)
-	copy(b1, b)
-	sort.Ints(a1)
-	sort.Ints(b1)
-	for i := 0; i < len(a1); i++ {
-		if a1[i] != b1[i] {
+	am := make(map[T]int)
+	bm := make(map[T]int)
+	for i := range a {
+		am[a[i]]++
+		bm[b[i]]++
+	}
+	if len(am) != len(bm) {
+		return false
+	}
+
+	for k, v := range am {
+		if v != bm[k] {
 			return false
 		}
 	}

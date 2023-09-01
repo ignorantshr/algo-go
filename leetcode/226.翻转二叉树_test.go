@@ -64,7 +64,27 @@ package leetcode
  * }
  */
 func invertTree(root *TreeNode) *TreeNode {
-	invertTreeWalk(root)
+	// invertTreeWalk(root)
+	invertTreeIterate(root)
+	return root
+}
+
+// 迭代法，前序遍历
+func invertTreeIterate(root *TreeNode) *TreeNode {
+	stack := make([]*TreeNode, 0)
+	stack = append(stack, root)
+
+	for len(stack) > 0 {
+		top := stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		top.Left, top.Right = top.Right, top.Left
+		if top.Right != nil {
+			stack = append(stack, top.Right)
+		}
+		if top.Left != nil {
+			stack = append(stack, top.Left)
+		}
+	}
 	return root
 }
 

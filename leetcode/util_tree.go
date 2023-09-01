@@ -1,5 +1,13 @@
 package leetcode
 
+type Node struct {
+	Val      int
+	Left     *Node
+	Right    *Node
+	Next     *Node
+	Children []*Node
+}
+
 type PTreeNode struct {
 	Val    int
 	Left   *PTreeNode
