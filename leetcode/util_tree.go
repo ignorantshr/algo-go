@@ -75,6 +75,25 @@ func NewTreeByPreOrder(vals []any) *TreeNode {
 	return nodes[0]
 }
 
+func (t *TreeNode) equal(another *TreeNode) bool {
+	var equals func(t1, t2 *TreeNode) bool
+	equals = func(t1, t2 *TreeNode) bool {
+		if t1 == nil && t2 == nil {
+			return true
+		}
+		if t1 != nil || t2 != nil {
+			return false
+		}
+
+		if t1.Val != t2.Val {
+			return false
+		}
+
+		return equals(t1.Left, t2.Left) && equals(t1.Right, t2.Right)
+	}
+	return equals(t, another)
+}
+
 func (t *TreeNode) bfsPrefix() []any {
 	res := make([]any, 0)
 	queue := make([]*TreeNode, 0)
