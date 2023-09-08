@@ -81,7 +81,7 @@ func (t *TreeNode) equal(another *TreeNode) bool {
 		if t1 == nil && t2 == nil {
 			return true
 		}
-		if t1 != nil || t2 != nil {
+		if t1 == nil || t2 == nil {
 			return false
 		}
 

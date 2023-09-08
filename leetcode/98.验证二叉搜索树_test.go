@@ -66,6 +66,94 @@ import (
  * }
  */
 func isValidBST(root *TreeNode) bool {
+	// pre98 = nil // 多次调用时每次都初始化
+	// return isValidBSTDfs2(root)
+	// return isValidBSTIterate2(root)
+	return isValidBSTDfs1(root)
+}
+
+func isValidBSTIterate2(root *TreeNode) bool {
+	// 中序遍历通用写法
+	if root == nil {
+		return true
+	}
+
+	stack := make([]*TreeNode, 0)
+	stack = append(stack, root)
+	var pre *TreeNode
+	for len(stack) > 0 {
+		top := stack[len(stack)-1]
+		if top != nil {
+			if top.Right != nil {
+				stack = stack[:len(stack)-1]
+				stack = append(stack, top.Right)
+				stack = append(stack, top)
+			}
+			stack = append(stack, nil)
+			if top.Left != nil {
+				stack = append(stack, top.Left)
+			}
+		} else {
+			stack = stack[:len(stack)-1]
+			top = stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			if pre != nil && pre.Val >= top.Val {
+				return false
+			}
+			pre = top
+		}
+	}
+	return true
+}
+
+func isValidBSTIterate1(root *TreeNode) bool {
+	// 中序遍历是有序的
+	if root == nil {
+		return true
+	}
+
+	stack := make([]*TreeNode, 0)
+	cur := root
+	var pre *TreeNode
+	for cur != nil || len(stack) > 0 {
+		for cur != nil {
+			stack = append(stack, cur)
+			cur = cur.Left
+		}
+
+		top := stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		if pre != nil && pre.Val >= top.Val {
+			return false
+		}
+		pre = top
+		cur = top.Right
+	}
+	return true
+}
+
+var pre98 *TreeNode
+
+func isValidBSTDfs2(root *TreeNode) bool {
+	// 中序遍历是有序的
+	if root == nil {
+		return true
+	}
+
+	if !isValidBSTDfs2(root.Left) {
+		return false
+	}
+
+	if pre98 == nil || pre98.Val < root.Val {
+		pre98 = root
+	} else {
+		return false
+	}
+
+	return isValidBSTDfs2(root.Right)
+}
+
+func isValidBSTDfs1(root *TreeNode) bool {
 	var isVaild func(r *TreeNode, max, min *TreeNode) bool
 	isVaild = func(r, max, min *TreeNode) bool {
 		if r == nil {
@@ -93,9 +181,9 @@ func Test_isValidBST(t *testing.T) {
 		want bool
 	}{
 		{"1", NewTreeByPreOrder([]any{1}), true},
-		{"1", NewTreeByPreOrder([]any{1, 2, 3}), false},
-		{"1", NewTreeByPreOrder([]any{2, 1, 3}), true},
-		{"1", NewTreeByPreOrder([]any{5, 1, 4, nil, nil, 3, 6}), false},
+		{"2", NewTreeByPreOrder([]any{1, 2, 3}), false},
+		{"3", NewTreeByPreOrder([]any{2, 1, 3}), true},
+		{"4", NewTreeByPreOrder([]any{5, 1, 4, nil, nil, 3, 6}), false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

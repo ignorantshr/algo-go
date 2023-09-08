@@ -78,6 +78,20 @@ func searchBST(root *TreeNode, val int) *TreeNode {
 	return nil
 }
 
+func searchBSTDfs(root *TreeNode, val int) *TreeNode {
+	if root == nil || root.Val == val {
+		return root
+	}
+
+	if root.Val > val {
+		return searchBST_RV(root.Left, val)
+	}
+	if root.Val < val {
+		return searchBST_RV(root.Right, val)
+	}
+	return nil
+}
+
 // @lc code=end
 
 func Test_searchBST(t *testing.T) {
