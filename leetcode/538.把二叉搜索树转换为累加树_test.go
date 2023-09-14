@@ -85,10 +85,12 @@ import (
  * }
  */
 func convertBST(root *TreeNode) *TreeNode {
-	return convertBSTMirros(root)
+	// return convertBSTIterate(root)
+	// return convertBSTMirros(root)
+	return convertBSTDfs(root)
 }
 
-func convertBST1(root *TreeNode) *TreeNode {
+func convertBSTDfs(root *TreeNode) *TreeNode {
 	var sum int
 	var traverse func(r *TreeNode)
 	traverse = func(r *TreeNode) {
@@ -103,6 +105,29 @@ func convertBST1(root *TreeNode) *TreeNode {
 	}
 
 	traverse(root)
+	return root
+}
+
+func convertBSTIterate(root *TreeNode) *TreeNode {
+	// 中序遍历数组从后往前累加
+	stack := make([]*TreeNode, 0)
+	cur := root
+	var pre *TreeNode
+	for cur != nil || len(stack) > 0 {
+		for cur != nil {
+			stack = append(stack, cur)
+			cur = cur.Right
+		}
+
+		top := stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+
+		if pre != nil {
+			top.Val += pre.Val
+		}
+		pre = top
+		cur = top.Left
+	}
 	return root
 }
 

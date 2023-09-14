@@ -109,8 +109,8 @@ func Test_lowestCommonAncestor235(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := lowestCommonAncestor(tt.args.root, tt.args.p, tt.args.q); !reflect.DeepEqual(got.Val, tt.want) {
-				t.Errorf("lowestCommonAncestor() = %v, want %v", got.Val, tt.want)
+			if got := lowestCommonAncestor235(tt.args.root, tt.args.p, tt.args.q); !reflect.DeepEqual(got.Val, tt.want) {
+				t.Errorf("lowestCommonAncestor235() = %v, want %v", got.Val, tt.want)
 			}
 		})
 	}
