@@ -40,3 +40,20 @@ func equalSlice(a, b []int) bool {
 	}
 	return true
 }
+
+type slice interface {
+	int | []int
+}
+
+func equalSliceMatrix(a, b [][]int) bool {
+	if len(a) != len(b) {
+		return false
+	}
+
+	for i := range a {
+		if !equalSlice(a[i], b[i]) {
+			return false
+		}
+	}
+	return true
+}
