@@ -1,5 +1,7 @@
 package leetcode
 
+import "sort"
+
 type comareEle interface {
 	int | string
 }
@@ -41,10 +43,6 @@ func equalSlice(a, b []int) bool {
 	return true
 }
 
-type slice interface {
-	int | []int
-}
-
 func equalSliceMatrix(a, b [][]int) bool {
 	if len(a) != len(b) {
 		return false
@@ -56,4 +54,36 @@ func equalSliceMatrix(a, b [][]int) bool {
 		}
 	}
 	return true
+}
+
+func equalSetMatrix(a, b [][]int) bool {
+	if len(a) != len(b) {
+		return false
+	}
+
+	matrixSort(a)
+	matrixSort(b)
+
+	for i := range a {
+		if !equalSet(a[i], b[i]) {
+			return false
+		}
+	}
+	return true
+}
+
+func matrixSort(a [][]int) {
+	sort.Slice(a, func(i, j int) bool {
+		if len(a[i]) < len(a[j]) {
+			return true
+		} else if len(a[i]) > len(a[j]) {
+			return false
+		}
+		for m := range a[i] {
+			if a[i][m] > a[j][m] {
+				return false
+			}
+		}
+		return true
+	})
 }

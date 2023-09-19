@@ -58,9 +58,9 @@ import (
 // @lc code=start
 func permute(nums []int) [][]int {
 	res := make([][]int, 0)
-	var choose func(path []int, options []int, l int)
-	choose = func(path, options []int, l int) {
-		if len(options) == l {
+	var choose func(path []int, l int)
+	choose = func(path []int, l int) {
+		if len(nums) == l {
 			// fmt.Println("result", path, options[l:])
 			tmp := make([]int, len(path))
 			copy(tmp, path)
@@ -69,16 +69,16 @@ func permute(nums []int) [][]int {
 		}
 
 		// fmt.Println("choose a path", path, options[l:])
-		for i := l; i < len(options); i++ {
-			path = append(path, options[i])
-			options[i], options[l] = options[l], options[i]
-			choose(path, options, l+1)
-			options[l], options[i] = options[i], options[l]
+		for i := l; i < len(nums); i++ {
+			path = append(path, nums[i])
+			nums[i], nums[l] = nums[l], nums[i]
+			choose(path, l+1)
+			nums[l], nums[i] = nums[i], nums[l]
 			path = path[:len(path)-1]
 		}
 	}
 
-	choose([]int{}, nums, 0)
+	choose([]int{}, 0)
 	return res
 }
 
