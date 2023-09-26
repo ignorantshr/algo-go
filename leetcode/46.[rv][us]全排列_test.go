@@ -96,9 +96,33 @@ func Test_permute(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := permute(tt.nums); !equalSliceMatrix(got, tt.want) {
+			if got := permute_RV(tt.nums); !equalSliceMatrix(got, tt.want) {
 				t.Errorf("permute() = %v, want %v", got, tt.want)
 			}
 		})
 	}
+}
+
+func permute_RV(nums []int) [][]int {
+	res := make([][]int, 0)
+	path := make([]int, 0)
+	var backtrack func(idx int)
+	backtrack = func(idx int) {
+		if idx == len(nums) {
+			tmp := make([]int, len(path))
+			copy(tmp, path)
+			res = append(res, tmp)
+			return
+		}
+
+		for i := idx; i < len(nums); i++ {
+			path = append(path, nums[i])
+			nums[i], nums[idx] = nums[idx], nums[i]
+			backtrack(idx + 1) // 注意⚠️
+			path = path[:len(path)-1]
+			nums[idx], nums[i] = nums[i], nums[idx]
+		}
+	}
+	backtrack(0)
+	return res
 }

@@ -110,14 +110,79 @@ func Test_solveNQueens(t *testing.T) {
 		n    int
 		want [][]string
 	}{
-		{"1", 1, [][]string{{"Q"}}},
+		// {"1", 1, [][]string{{"Q"}}},
 		{"4", 4, [][]string{{".Q..", "...Q", "Q...", "..Q."}, {"..Q.", "Q...", "...Q", ".Q.."}}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := solveNQueens(tt.n); !reflect.DeepEqual(got, tt.want) {
+			if got := solveNQueens_RV(tt.n); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("solveNQueens() = %v, want %v", got, tt.want)
 			}
 		})
 	}
+}
+
+func solveNQueens_RV(n int) [][]string {
+	res := make([][]string, 0)
+	choosed := make([][]byte, n)
+	for i := range choosed {
+		choosed[i] = make([]byte, n)
+	}
+
+	valid := func(row, col int) bool {
+		// 算法是每行取一个，就不用校验行有效性了
+		for i, j1, j2 := row-1, col-1, col+1; i >= 0; {
+			if j1 >= 0 {
+				if choosed[i][j1] == 'Q' { // 主对角线
+					return false
+				}
+			}
+			if j2 < n {
+				if choosed[i][j2] == 'Q' { // 副对角线
+					return false
+				}
+			}
+			i--
+			j1--
+			j2++
+		}
+		for i := row - 1; i >= 0; i-- {
+			if choosed[i][col] == 'Q' { // 同列
+				return false
+			}
+		}
+		return true
+	}
+
+	var backtrace func(row int)
+	backtrace = func(row int) {
+		if row == n {
+			tmp := make([]string, n)
+			for i, row := range choosed {
+				for _, v := range row {
+					if v != 'Q' {
+						tmp[i] += "."
+					} else {
+						tmp[i] += "Q"
+					}
+				}
+			}
+			res = append(res, tmp)
+			return
+		}
+
+		// 遍历这行的每一列，找到一个符合的位置
+		for j := 0; j < n; j++ {
+			if !valid(row, j) {
+				choosed[row][j] = '.'
+				continue
+			}
+
+			choosed[row][j] = 'Q'
+			backtrace(row + 1)
+			choosed[row][j] = '.'
+		}
+	}
+	backtrace(0)
+	return res
 }

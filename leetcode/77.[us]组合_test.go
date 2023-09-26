@@ -68,7 +68,8 @@ func combine(n int, k int) [][]int {
 			return
 		}
 
-		for i := startIdx; i <= n; i++ {
+		// n-(k-len(path)) 剪枝
+		for i := startIdx; i <= n-(k-len(path))+1; i++ {
 			path = append(path, i)
 			backtrack(i + 1)
 			path = path[:len(path)-1]
@@ -106,4 +107,27 @@ func Test_combine(t *testing.T) {
 			}
 		})
 	}
+}
+
+func combine_RV(n int, k int) [][]int {
+	res := make([][]int, 0)
+	path := make([]int, 0)
+
+	var backtrack func(idx int)
+	backtrack = func(idx int) {
+		if len(path) == k {
+			tmp := make([]int, k)
+			copy(tmp, path)
+			res = append(res, tmp)
+			return
+		}
+
+		for i := idx; i < n-(k-len(path))+1; i++ {
+			path = append(path, i)
+			backtrack(i + 1)
+			path = path[:len(path)-1]
+		}
+	}
+	backtrack(0)
+	return res
 }

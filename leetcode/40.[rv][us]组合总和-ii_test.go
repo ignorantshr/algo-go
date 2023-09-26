@@ -114,9 +114,42 @@ func Test_combinationSum2(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := combinationSum2(tt.args.candidates, tt.args.target); !reflect.DeepEqual(got, tt.want) {
+			if got := combinationSum2_RV(tt.args.candidates, tt.args.target); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("combinationSum2() = %v, want %v", got, tt.want)
 			}
 		})
 	}
+}
+
+func combinationSum2_RV(candidates []int, target int) [][]int {
+	res := make([][]int, 0)
+	path := make([]int, 0)
+	sum := 0
+	sort.Ints(candidates)
+
+	var backtrack func(idx int)
+	backtrack = func(idx int) {
+		if sum == target {
+			tmp := make([]int, len(path))
+			copy(tmp, path)
+			res = append(res, tmp)
+			return
+		}
+
+		for i := idx; i < len(candidates); i++ {
+			if i > idx && candidates[i] == candidates[i-1] {
+				continue
+			}
+			if candidates[i]+sum > target {
+				break
+			}
+			path = append(path, candidates[i])
+			sum += candidates[i]
+			backtrack(i + 1)
+			path = path[:len(path)-1]
+			sum -= candidates[i]
+		}
+	}
+	backtrack(0)
+	return res
 }

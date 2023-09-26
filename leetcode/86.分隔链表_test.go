@@ -59,7 +59,7 @@ import (
  *     Next *ListNode
  * }
  */
-func partition(head *ListNode, x int) *ListNode {
+func partition86(head *ListNode, x int) *ListNode {
 	small, large := &ListNode{}, &ListNode{}
 	dummy1, dummy2 := small, large
 	for head != nil {
@@ -128,7 +128,7 @@ func Test_partition(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := partition(tt.args.head, tt.args.x); !reflect.DeepEqual(got, tt.want) {
+			if got := partition86(tt.args.head, tt.args.x); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("partition() = %v, want %v", got, tt.want)
 			}
 		})

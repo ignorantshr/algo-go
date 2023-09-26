@@ -83,9 +83,29 @@ func Test_subsets(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := subsets(tt.nums); !equalSetMatrix(got, tt.want) {
+			if got := subsets_RV(tt.nums); !equalSetMatrix(got, tt.want) {
 				t.Errorf("subsets() = %v, want %v", got, tt.want)
 			}
 		})
 	}
+}
+
+func subsets_RV(nums []int) [][]int {
+	res := make([][]int, 0)
+	path := make([]int, 0)
+
+	var backtrack func(idx int)
+	backtrack = func(idx int) {
+		tmp := make([]int, len(path))
+		copy(tmp, path)
+		res = append(res, tmp)
+
+		for i := idx; i < len(nums); i++ {
+			path = append(path, nums[i])
+			backtrack(i + 1)
+			path = path[:len(path)-1]
+		}
+	}
+	backtrack(0)
+	return res
 }

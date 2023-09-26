@@ -127,9 +127,55 @@ func Test_solveSudoku(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if solveSudoku(tt.board); !reflect.DeepEqual(tt.board, tt.want) {
+			if solveSudoku_RV(tt.board); !reflect.DeepEqual(tt.board, tt.want) {
 				t.Errorf("solveSudoku() = %v, want %v", tt.board, tt.want)
 			}
 		})
 	}
+}
+
+func solveSudoku_RV(board [][]byte) {
+	dimension := len(board)
+	finalPos := dimension * dimension
+
+	valid := func(row, col int, b byte) bool {
+		for i := 0; i < dimension; i++ {
+			if board[row][i] == b {
+				return false
+			}
+			if board[i][col] == b {
+				return false
+			}
+			if board[row/3*3+i/3][col/3*3+i%3] == b {
+				return false
+			}
+		}
+		return true
+	}
+
+	var backtrace func(pos int) bool
+	backtrace = func(pos int) bool {
+		for pos < finalPos && board[pos/dimension][pos%dimension] != '.' {
+			pos++
+		}
+		if pos == finalPos {
+			return true
+		}
+
+		row := pos / dimension
+		col := pos % dimension
+		for n := '1'; n <= '9'; n++ {
+			if !valid(row, col, byte(n)) {
+				continue
+			}
+
+			board[row][col] = byte(n)
+			if backtrace(pos + 1) {
+				return true
+			}
+			board[row][col] = '.'
+		}
+		return false
+	}
+	backtrace(0)
 }

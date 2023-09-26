@@ -19,9 +19,9 @@ import (
 
 // @lc code=start
 type MyLinkedList struct {
-	head   *ListNode
-	tail   *ListNode
-	length int
+	head *ListNode
+	tail *ListNode
+	size int
 }
 
 /** Initialize your data structure here. */
@@ -38,7 +38,7 @@ func Constructor707() MyLinkedList {
     invalid, return -1.
 */
 func (this *MyLinkedList) Get(index int) int {
-	if index < 0 || index >= this.length {
+	if index < 0 || index >= this.size {
 		return -1
 	}
 
@@ -55,7 +55,7 @@ func (this *MyLinkedList) Get(index int) int {
 */
 func (this *MyLinkedList) AddAtHead(val int) {
 	this.head = &ListNode{Next: this.head, Val: val}
-	this.length++
+	this.size++
 	if this.tail == nil {
 		this.tail = this.head
 	}
@@ -66,7 +66,7 @@ func (this *MyLinkedList) AddAtTail(val int) {
 	tail := &ListNode{Val: val}
 	this.tail.Next = tail
 	this.tail = tail
-	this.length++
+	this.size++
 	if this.head == nil {
 		this.head = this.tail
 	}
@@ -79,7 +79,7 @@ func (this *MyLinkedList) AddAtTail(val int) {
     inserted.
 */
 func (this *MyLinkedList) AddAtIndex(index int, val int) {
-	if index >= this.length {
+	if index >= this.size {
 		return
 	}
 
@@ -88,7 +88,7 @@ func (this *MyLinkedList) AddAtIndex(index int, val int) {
 		return
 	}
 
-	if index == this.length {
+	if index == this.size {
 		this.AddAtTail(val)
 		return
 	}
@@ -100,13 +100,13 @@ func (this *MyLinkedList) AddAtIndex(index int, val int) {
 	}
 
 	pre.Next = &ListNode{Next: pre.Next, Val: val}
-	this.length++
+	this.size++
 	this.head = dummy.Next
 }
 
 /** Delete the index-th node in the linked list, if the index is valid. */
 func (this *MyLinkedList) DeleteAtIndex(index int) {
-	if index < 0 || index >= this.length {
+	if index < 0 || index >= this.size {
 		return
 	}
 
@@ -121,7 +121,7 @@ func (this *MyLinkedList) DeleteAtIndex(index int) {
 		this.tail = pre
 	}
 	pre.Next = pre.Next.Next
-	this.length--
+	this.size--
 	this.head = dummy.Next
 }
 
@@ -131,7 +131,7 @@ func (this *MyLinkedList) walk() {
 	for cur := this.head; cur != nil; cur = cur.Next {
 		fmt.Printf(" %d ->", cur.Val)
 	}
-	fmt.Printf(" {%v,%v}[%d]\n", this.head, this.tail, this.length)
+	fmt.Printf(" {%v,%v}[%d]\n", this.head, this.tail, this.size)
 }
 
 func TestConstructor707707(t *testing.T) {

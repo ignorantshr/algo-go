@@ -45,7 +45,6 @@
 package leetcode
 
 import (
-	"reflect"
 	"sort"
 	"testing"
 )
@@ -97,9 +96,44 @@ func Test_permuteUnique(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := permuteUnique(tt.nums); !reflect.DeepEqual(got, tt.want) {
+			if got := permuteUnique_RV(tt.nums); !equalSetMatrix(got, tt.want) {
 				t.Errorf("permuteUnique() = %v, want %v", got, tt.want)
 			}
 		})
 	}
+}
+
+func permuteUnique_RV(nums []int) [][]int {
+	res := make([][]int, 0)
+	path := make([]int, 0)
+	used := make([]bool, len(nums))
+	sort.Ints(nums)
+
+	var backtrack func(idx int)
+	backtrack = func(idx int) {
+		if len(path) == len(nums) {
+			tmp := make([]int, len(path))
+			copy(tmp, path)
+			res = append(res, tmp)
+			return
+		}
+
+		for i := 0; i < len(nums); i++ {
+			if used[i] {
+				continue
+			}
+			// 只有前面相同元素用上了才会使用本元素，这样保证了相同元素之间的相对位置
+			if i > 0 && nums[i] == nums[i-1] && !used[i-1] {
+				continue
+			}
+
+			path = append(path, nums[i])
+			used[i] = true
+			backtrack(idx + 1)
+			path = path[:len(path)-1]
+			used[i] = false
+		}
+	}
+	backtrack(0)
+	return res
 }

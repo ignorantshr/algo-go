@@ -9,5 +9,6 @@
 文件标记：
 
 - rv: review, 复习
+- fg: forget, 忘记
 - us: un-committed, 未提交到 LeetCode 进行验证
 - dk: don't know, 不懂

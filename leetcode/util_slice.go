@@ -30,7 +30,7 @@ func equalSet[T comareEle](a, b []T) bool {
 	return true
 }
 
-func equalSlice(a, b []int) bool {
+func equalSlice[T comareEle](a, b []T) bool {
 	if len(a) != len(b) {
 		return false
 	}
@@ -43,7 +43,7 @@ func equalSlice(a, b []int) bool {
 	return true
 }
 
-func equalSliceMatrix(a, b [][]int) bool {
+func equalSliceMatrix[T comareEle](a, b [][]T) bool {
 	if len(a) != len(b) {
 		return false
 	}
@@ -56,7 +56,7 @@ func equalSliceMatrix(a, b [][]int) bool {
 	return true
 }
 
-func equalSetMatrix(a, b [][]int) bool {
+func equalSetMatrix[T comareEle](a, b [][]T) bool {
 	if len(a) != len(b) {
 		return false
 	}
@@ -72,7 +72,7 @@ func equalSetMatrix(a, b [][]int) bool {
 	return true
 }
 
-func matrixSort(a [][]int) {
+func matrixSort[T comareEle](a [][]T) {
 	sort.Slice(a, func(i, j int) bool {
 		if len(a[i]) < len(a[j]) {
 			return true
