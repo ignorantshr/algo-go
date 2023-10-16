@@ -92,17 +92,18 @@ func lengthOfLISDp(nums []int) int {
 }
 
 func lengthOfLISBinarySearch(nums []int) int {
+	// 基于特定的规则，就能算出结果
 	size := len(nums)
 	top := make([]int, size)
 	piles := 0
 
-	for _, n := range nums {
+	for _, card := range nums {
 		left, right := 0, piles
 		for left < right {
 			mid := left + (right-left)/2
-			if top[mid] < n {
+			if top[mid] < card {
 				left = mid + 1
-			} else if top[mid] > n {
+			} else if top[mid] > card {
 				right = mid
 			} else {
 				left = mid
@@ -113,7 +114,7 @@ func lengthOfLISBinarySearch(nums []int) int {
 		if left == piles {
 			piles++
 		}
-		top[left] = n
+		top[left] = card
 	}
 	return piles
 }
