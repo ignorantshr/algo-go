@@ -134,9 +134,28 @@ func Test_lengthOfLIS(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := lengthOfLIS(tt.nums); got != tt.want {
+			if got := lengthOfLISDp_RV(tt.nums); got != tt.want {
 				t.Errorf("lengthOfLIS() = %v, want %v", got, tt.want)
 			}
 		})
 	}
+}
+
+func lengthOfLISDp_RV(nums []int) int {
+	dp := make([]int, len(nums)) // dp[i] 代表了以 nums[i] 结尾的最长递增子序列的长度
+	dp[0] = 1
+
+	for i := 1; i < len(nums); i++ {
+		for j := 0; j < i; j++ {
+			// 找到所有的比 nums[i] 小的数结尾的 dp,
+			if nums[j] < nums[i] {
+				dp[i] = max(dp[i], dp[j]+1)
+			}
+		}
+	}
+	m := 0
+	for _, v := range dp {
+		m = max(m, v)
+	}
+	return m
 }
