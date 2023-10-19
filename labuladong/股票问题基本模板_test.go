@@ -37,8 +37,8 @@ func maxProfit_Base(maxK int, prices []int) int {
 	for i := 0; i < size; i++ {
 		for k := maxK; k > 0; k-- { // j == 0 时不会再改变结果了，无需遍历
 			if i-1 == -1 { // 对 i==-1 的情况特殊处理
-				dp[0][k][0] = 0          // max(dp[i-1][k][0], dp[i-1][k][1]+prices[i])
-				dp[0][k][1] = -prices[i] // max(dp[i-1][k][1], dp[i-1][k-1][0]-prices[i])
+				dp[i][k][0] = 0          // max(dp[i-1][k][0], dp[i-1][k][1]+prices[i])
+				dp[i][k][1] = -prices[i] // max(dp[i-1][k][1], dp[i-1][k-1][0]-prices[i])
 				continue
 			}
 
@@ -51,6 +51,47 @@ func maxProfit_Base(maxK int, prices []int) int {
 	}
 
 	return dp[size-1][maxK][0] // 最后一天如果持有股票，肯定是卖了之后的利润更高
+}
+
+func maxProfit_all_in_one(maxK int, prices []int, cooldown int, fee int) int {
+	size := len(prices)
+
+	// 一次交易由买入和卖出构成，至少需要两天。
+	if maxK > size/2 {
+		// 相当于 k 无上限的情况
+		return 0 // todo
+	}
+
+	dp := make([][][2]int, size)
+	for i := 0; i < size; i++ {
+		dp[i] = make([][2]int, maxK+1)
+		for j := range dp[i] {
+			dp[i][j] = [2]int{}
+		}
+		if maxK > 0 {
+			dp[i][0][0] = 0
+			dp[i][0][1] = math.MinInt
+		}
+	}
+
+	for i := 0; i < size; i++ {
+		for k := maxK; k > 0; k-- {
+			if i-1 == -1 {
+				dp[i][k][0] = 0
+				dp[i][k][1] = -prices[i] - fee
+				continue
+			}
+			if i-1-cooldown < 0 {
+				dp[i][k][0] = max(dp[i-1][k][0], dp[i-1][k][1]+prices[i])
+				dp[i][k][1] = max(dp[i-1][k][1], -prices[i]-fee)
+				continue
+			}
+			dp[i][k][0] = max(dp[i-1][k][0], dp[i-1][k][1]+prices[i])
+			dp[i][k][1] = max(dp[i-1][k][1], dp[i-1-cooldown][k-1][0]-prices[i]-fee)
+		}
+	}
+
+	return dp[size-1][maxK][0]
 }
 
 func Test_maxProfit_Base(t *testing.T) {
