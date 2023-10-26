@@ -2,12 +2,12 @@ package leetcode
 
 import "sort"
 
-type comareEle interface {
+type compareEle interface {
 	int | string
 }
 
 // 集合相等
-func equalSet[T comareEle](a, b []T) bool {
+func equalSet[T compareEle](a, b []T) bool {
 	if len(a) != len(b) {
 		return false
 	}
@@ -30,7 +30,7 @@ func equalSet[T comareEle](a, b []T) bool {
 	return true
 }
 
-func equalSlice[T comareEle](a, b []T) bool {
+func equalSlice[T compareEle](a, b []T) bool {
 	if len(a) != len(b) {
 		return false
 	}
@@ -43,7 +43,7 @@ func equalSlice[T comareEle](a, b []T) bool {
 	return true
 }
 
-func equalSliceMatrix[T comareEle](a, b [][]T) bool {
+func equalSliceMatrix[T compareEle](a, b [][]T) bool {
 	if len(a) != len(b) {
 		return false
 	}
@@ -56,7 +56,7 @@ func equalSliceMatrix[T comareEle](a, b [][]T) bool {
 	return true
 }
 
-func equalSetMatrix[T comareEle](a, b [][]T) bool {
+func equalSetMatrix[T compareEle](a, b [][]T) bool {
 	if len(a) != len(b) {
 		return false
 	}
@@ -72,7 +72,7 @@ func equalSetMatrix[T comareEle](a, b [][]T) bool {
 	return true
 }
 
-func matrixSort[T comareEle](a [][]T) {
+func matrixSort[T compareEle](a [][]T) {
 	sort.Slice(a, func(i, j int) bool {
 		if len(a[i]) < len(a[j]) {
 			return true

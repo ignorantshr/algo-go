@@ -33,7 +33,7 @@ type MaxQueue struct {
 	real  []int
 }
 
-func Constructor() MaxQueue {
+func Constructor剑指59() MaxQueue {
 	return MaxQueue{
 		queue: make([]int, 0),
 		real:  make([]int, 0),
