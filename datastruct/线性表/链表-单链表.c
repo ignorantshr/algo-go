@@ -5,10 +5,10 @@
 
 typedef struct LNode {
     ElemType data;
-    LNode* next;
+    struct LNode* next;
 } LNode, *LinkList;
 
-// 头插法，数据倒序
+// 头插法，注意！！！：数据倒序
 // 带头结点
 LinkList InitHeadList1(int len, int vals[]) {
     LinkList l = (LinkList)malloc(sizeof(LNode) * len);
@@ -21,6 +21,59 @@ LinkList InitHeadList1(int len, int vals[]) {
     }
     return l;
 }
+
+// 头插法，注意！！！：数据倒序
+// 不带头结点
+LinkList InitHeadList2(int len, int vals[]) {
+    LinkList l;
+    for (int i = 0; i < len; i++) {
+        LNode* node = (LNode*)malloc(sizeof(LNode));
+        node->data = vals[i];
+        node->next = l;
+        l = node;
+    }
+    return l;
+}
+
+// 尾插法
+// 有头结点
+LinkList InitTailList1(int len, int vals[]) {
+    LinkList l = (LinkList)malloc(sizeof(LNode));
+    LNode* r = l;
+
+    for (int i = 0; i < len; i++) {
+        LNode* n = (LNode*)malloc(sizeof(LNode));
+        n->data = vals[i];
+        r->next = n;
+        r = n;
+    }
+    r->next = NULL;
+    return l;
+}
+
+// 尾插法
+// 没有头结点
+LinkList InitTailList2(int len, int vals[]) {
+    LinkList l;
+    LinkList r = l;
+
+    for (int i = 0; i < len; i++) {
+        LNode* n = (LNode*)malloc(sizeof(LNode));
+        n->data = vals[i];
+        if (i == 0) {
+            l = n;
+        } else {
+            r->next = n;
+        }
+        r = n;
+    }
+    r->next = NULL;
+    return l;
+}
+
+// ---------------------------------------
+
+// 带头结点
 
 LNode* GetElem1(LinkList l, int i) {
     if (i == 0) {
@@ -51,7 +104,7 @@ LNode* LocateElem1(LinkList l, ElemType e) {
 }
 
 // 前插法
-LinkList* ListInsert1_pre(LinkList l, int i, int e) {
+LinkList ListInsert1_pre(LinkList l, int i, int e) {
     LNode* p = GetElem1(l, i - 1);  // 对于前驱节点来说就是后插
     if (p == NULL) {
         return l;
@@ -110,17 +163,23 @@ bool ListDelete4Spec(LNode* n) {
 
 // ------------------------------------------------
 
-// 头插法，数据倒序
 // 无头结点
-LinkList InitHeadList2(int len, int vals[]) {
-    LinkList l;
-    for (int i = 1; i < len; i++) {
-        LNode* node = (LNode*)malloc(sizeof(LNode));
-        node->data = vals[i];
-        node->next = l;
-        l = node;
+
+LNode* GetElem2(LinkList l, int i) {
+    if (i < 1) {
+        return NULL;
     }
-    return l;
+
+    LNode* p = l;
+    while (p != NULL && i > 1) {
+        p = p->next;
+    }
+
+    if (p == NULL) {
+        return NULL;
+    }
+
+    return p;
 }
 
 // 前插法
@@ -205,27 +264,28 @@ bool List2Delete4Spec(LNode* n) {
     return true;
 }
 
-LNode* GetElem2(LinkList l, int i) {
-    if (i < 1) {
-        return -1;
-    }
-
-    LNode* p = l;
-    while (p != NULL && i > 1) {
-        p = p->next;
-    }
-
-    if (p == NULL) {
-        return -1;
-    }
-
-    return p->data;
-}
-
 void printlist(LinkList l) {
-    printf("[\n");
+    printf("[");
     for (LNode* n = l; n != NULL; n = n->next) {
         printf("%d ", n->data);
     }
     printf("]\n");
+}
+
+int main(int argc, char const* argv[]) {
+    int vals[] = {1, 2, 3};
+    LinkList hl1 = InitHeadList1(3, vals);
+    printlist(hl1);
+
+    // int vals[] = {1, 2, 3};
+    LinkList hl2 = InitHeadList2(3, vals);
+    printlist(hl2);
+
+    // int vals[] = {1};
+    LinkList l1 = InitTailList1(1, vals);
+
+    printlist(l1);
+    LinkList l2 = InitTailList2(1, vals);
+    printlist(l2);
+    return 0;
 }
