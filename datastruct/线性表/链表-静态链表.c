@@ -1,7 +1,6 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include "sequence_table.h"
 
 #define MaxSize 10
@@ -22,9 +21,12 @@ void initSLinklist(SLinklist l) {
     head.next = -1;  // 链表尾部设置一个特殊值
     l[0] = head;
     for (int i = 1; i <= MaxSize; i++) {
-        Elem* tmp = (Elem*)malloc(sizeof(Elem));
-        tmp->next = -2;  // 空位都设置一个特殊值
-        l[i] = *tmp;
+        // 不需要
+        // Elem* tmp = (Elem*)malloc(sizeof(Elem));
+        // tmp->next = -2;  // 空位都设置一个特殊值
+        // l[i] = *tmp;
+
+        l[i].next = -2;
     }
 }
 
