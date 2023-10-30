@@ -17,7 +17,7 @@ void InitList(SqList* l) {
 }
 
 void DestoryList(SqList* l) {
-    free(l);
+    // 自动回收
 }
 
 // i 位序，from 1

@@ -28,5 +28,5 @@ void IncreaseSize(SeqList* l, int len) {
 }
 
 void DestoryList(SeqList* l) {
-    free(l);
+    free(l->data);
 }
