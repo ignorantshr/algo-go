@@ -14,9 +14,10 @@ void initListStack(ListStack s) {
 }
 
 void initHListStack(ListStack s) {
-    s = (Node*)malloc(sizeof(Node));
-    s->data = 0;
-    s->next = NULL;
+    Node* n = (Node*)malloc(sizeof(Node));
+    n->data = 0;
+    n->next = NULL;
+    *s = *n;
 }
 
 /*
@@ -41,8 +42,8 @@ bool push(ListStack* s, ElemType e) {
 bool pushH(ListStack s, ElemType e) {
     Node* tmp = (Node*)malloc(sizeof(Node));
     tmp->data = e;
-    tmp->next = s->next;
-    s->next = tmp;
+    tmp->next = (s)->next;
+    (s)->next = tmp;
     return true;
 }
 
@@ -60,17 +61,31 @@ bool pop(ListStack* s, ElemType* e) {
 }
 
 bool popH(ListStack s, ElemType* e) {
-    if (s->next == NULL) {
+    if ((s)->next == NULL) {
         return false;
     }
 
-    Node* tmp = s->next;
+    Node* tmp = (s)->next;
     *e = tmp->data;
-    s->next = tmp->next;
+    (s)->next = tmp->next;
     tmp->next = NULL;
     free(tmp);
     return true;
 }
+
+// popH(s, &e); 这种写法的函数形式
+// bool popH(ListStack* s, ElemType* e) {
+//     if ((*s)->next == NULL) {
+//         return false;
+//     }
+
+//     Node* tmp = (*s)->next;
+//     *e = tmp->data;
+//     (*s)->next = tmp->next;
+//     tmp->next = NULL;
+//     free(tmp);
+//     return true;
+// }
 
 bool top(ListStack s, ElemType* e) {
     if (s == NULL) {
@@ -91,21 +106,36 @@ bool topH(ListStack s, ElemType* e) {
 }
 
 int main(int argc, char const* argv[]) {
-    ListStack s = NULL;
-    initListStack(s);
-    // initHListStack(s);
+    // ListStack s = NULL;
+    // initListStack(s);
+    // ElemType e;
+
+    // push(&s, 1);
+    // top(s, &e);
+    // printf("%d\n", e);
+
+    // push(&s, 2);
+    // top(s, &e);
+    // printf("%d\n", e);
+
+    // pop(&s, &e);
+    // top(s, &e);
+    // printf("%d\n", e);
+
+    ListStack s = (Node*)malloc(sizeof(Node));
+    initHListStack(s);
     ElemType e;
 
-    push(&s, 1);
-    top(s, &e);
+    pushH(s, 1);
+    topH(s, &e);
     printf("%d\n", e);
 
-    push(&s, 2);
-    top(s, &e);
+    pushH(s, 2);
+    topH(s, &e);
     printf("%d\n", e);
 
-    pop(&s, &e);
-    top(s, &e);
+    popH(s, &e);
+    topH(s, &e);
     printf("%d\n", e);
     return 0;
 }
