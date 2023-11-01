@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../stack.h"
 #include "../链栈.c"
 
 char getMathChar(char r) {
