@@ -20,6 +20,14 @@ void initHListStack(ListStack s) {
     *s = *n;
 }
 
+void destroy(ListStack s) {
+    for (Node* n = s; n != NULL;) {
+        Node* next = s->next;
+        free(n);
+        n = next;
+    }
+}
+
 /*
  *在
  *C语言中，指针本身也是可以传递的。当需要修改指针本身的值时，我们可以通过传递指针的指针或指针的引用来实现。
@@ -48,7 +56,7 @@ bool pushH(ListStack s, ElemType e) {
 }
 
 bool pop(ListStack* s, ElemType* e) {
-    if (s == NULL) {
+    if (*s == NULL) {
         return false;
     }
 
@@ -105,23 +113,33 @@ bool topH(ListStack s, ElemType* e) {
     return true;
 }
 
-int main(int argc, char const* argv[]) {
-    // ListStack s = NULL;
-    // initListStack(s);
-    // ElemType e;
+void test() {
+    ListStack s = NULL;
+    initListStack(s);
+    ElemType e;
 
-    // push(&s, 1);
-    // top(s, &e);
-    // printf("%d\n", e);
+    push(&s, 1);
+    top(s, &e);
+    printf("%d\n", e);
 
-    // push(&s, 2);
-    // top(s, &e);
-    // printf("%d\n", e);
+    push(&s, 2);
+    top(s, &e);
+    printf("%d\n", e);
 
-    // pop(&s, &e);
-    // top(s, &e);
-    // printf("%d\n", e);
+    pop(&s, &e);
+    top(s, &e);
+    printf("%d\n", e);
 
+    pop(&s, &e);
+    top(s, &e);
+    printf("%d\n", e);
+
+    pop(&s, &e);
+    top(s, &e);
+    printf("%d\n", e);
+}
+
+void testHead() {
     ListStack s = (Node*)malloc(sizeof(Node));
     initHListStack(s);
     ElemType e;
@@ -137,5 +155,18 @@ int main(int argc, char const* argv[]) {
     popH(s, &e);
     topH(s, &e);
     printf("%d\n", e);
-    return 0;
+
+    popH(s, &e);
+    topH(s, &e);
+    printf("%d\n", e);
+
+    popH(s, &e);
+    topH(s, &e);
+    printf("%d\n", e);
 }
+
+// int main(int argc, char const* argv[]) {
+//     test();
+//     // testHead();
+//     return 0;
+// }
