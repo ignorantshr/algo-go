@@ -5,8 +5,6 @@
 #include <string.h>
 #include "../链栈.c"
 
-// 也叫逆波兰式
-
 int CalculateInversePolishFormula(char* expression) {
     ListStack stack = NULL;
     initListStack(stack);

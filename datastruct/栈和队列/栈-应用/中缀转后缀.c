@@ -5,10 +5,12 @@
 #include <string.h>
 #include "../链栈.c"
 
+// 也叫逆波兰式
+// 按照“左优先”原则确定的这些运算符的生效顺序和后缀表达式中各个运算符从左到右出现的次序是相同的
+
 void infix2suffix(char* s, char* res) {
-    ListStack numstack = NULL;
+    res[0] = '\0';
     ListStack opstack = NULL;
-    initListStack(numstack);
     initListStack(opstack);
 
     int len = strlen(s);
@@ -23,20 +25,41 @@ void infix2suffix(char* s, char* res) {
             if (j > 0) {
                 numStr[j] = '\0';
                 j = 0;
-                push(&numstack, numStr[0]);
+                strcat(res, numStr);
             }
             ElemType e;
+            ElemType topv;
             switch (cur) {
-                case '(':
                 case '+':
                 case '-':
+                    // 弹出优先级 >=自己的，然后入栈。
+                    // 因为之前入栈的肯定比自己的运行顺序靠前
+                    while (top(opstack, &topv) && topv == '-' || topv == '+') {
+                        pop(&opstack, &topv);
+                        char str[20];  // 存储转换后的字符串
+                        snprintf(str, sizeof(str), "%c", topv);
+                        strcat(res, str);
+                    }
+                    push(&opstack, cur);
+                    break;
                 case '*':
                 case '/':
+                    while (top(opstack, &topv) && topv == '/' || topv == '*') {
+                        pop(&opstack, &topv);
+                        char str[20];  // 存储转换后的字符串
+                        snprintf(str, sizeof(str), "%c", topv);
+                        strcat(res, str);
+                    }
+                    push(&opstack, cur);
+                    break;
+                case '(':
                     push(&opstack, cur);
                     break;
                 case ')':
                     while (pop(&opstack, &e) && e != '(') {
-                        push(&numstack, e);
+                        char str[20];  // 存储转换后的字符串
+                        snprintf(str, sizeof(str), "%c", e);
+                        strcat(res, str);
                     };
                     break;
                 default:
@@ -48,30 +71,15 @@ void infix2suffix(char* s, char* res) {
     if (j > 0) {
         numStr[j] = '\0';
         j = 0;
-        push(&numstack, numStr[0]);
-    }
-    int i = 0;
-    for (Node* n = numstack; n != NULL; n = n->next) {
-        if (n != NULL) {
-            char c = n->data;
-            res[i++] = c;
-            // if (c < '0' || c > '9') {
-            // } else {
-            //     res[i++] = '0' + n->data;
-            // }
-        }
-    }
-    for (int j = 0; j < i >> 1; j++) {
-        char tmp = res[i - j - 1];
-        res[i - j - 1] = res[j];
-        res[j] = tmp;
+        strcat(res, numStr);
     }
     for (Node* n = opstack; n != NULL; n = n->next) {
         if (n != NULL) {
-            res[i++] = n->data;
+            char str[20];  // 存储转换后的字符串
+            snprintf(str, sizeof(str), "%d", n->data);
+            strcat(res, str);
         }
     }
-    res[i] = '\0';
 }
 
 int main(int argc, char const* argv[]) {
