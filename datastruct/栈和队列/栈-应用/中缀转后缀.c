@@ -34,9 +34,10 @@ void infix2suffix(char* s, char* res) {
                 case '-':
                     // 弹出优先级 >=自己的，然后入栈。
                     // 因为之前入栈的肯定比自己的运行顺序靠前
-                    while (top(opstack, &topv) && topv == '-' || topv == '+') {
+                    while (top(opstack, &topv) &&
+                           topv != '(') {  // '*' '/' '+' '-'
                         pop(&opstack, &topv);
-                        char str[20];  // 存储转换后的字符串
+                        char str[2];  // 存储转换后的字符
                         snprintf(str, sizeof(str), "%c", topv);
                         strcat(res, str);
                     }
@@ -44,9 +45,10 @@ void infix2suffix(char* s, char* res) {
                     break;
                 case '*':
                 case '/':
-                    while (top(opstack, &topv) && topv == '/' || topv == '*') {
+                    while (top(opstack, &topv) &&
+                           (topv == '/' || topv == '*')) {
                         pop(&opstack, &topv);
-                        char str[20];  // 存储转换后的字符串
+                        char str[2];  // 存储转换后的字符
                         snprintf(str, sizeof(str), "%c", topv);
                         strcat(res, str);
                     }
@@ -57,7 +59,7 @@ void infix2suffix(char* s, char* res) {
                     break;
                 case ')':
                     while (pop(&opstack, &e) && e != '(') {
-                        char str[20];  // 存储转换后的字符串
+                        char str[2];  // 存储转换后的字符
                         snprintf(str, sizeof(str), "%c", e);
                         strcat(res, str);
                     };
@@ -75,8 +77,8 @@ void infix2suffix(char* s, char* res) {
     }
     for (Node* n = opstack; n != NULL; n = n->next) {
         if (n != NULL) {
-            char str[20];  // 存储转换后的字符串
-            snprintf(str, sizeof(str), "%d", n->data);
+            char str[2];  // 存储转换后的字符
+            snprintf(str, sizeof(str), "%c", n->data);
             strcat(res, str);
         }
     }
@@ -99,6 +101,9 @@ int main(int argc, char const* argv[]) {
 
     infix2suffix("1+1*(2-3)", res);
     assert(!strcmp("1123-*+", res));
+
+    infix2suffix("1*(2+3)/(4-5)", res);
+    assert(!strcmp("123+*45-/", res));
 
     infix2suffix("((5/(7-(1+1)))*3)-(2+(1+1))", res);
     assert(!strcmp("5711+-/3*211++-", res));
