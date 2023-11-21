@@ -9,19 +9,19 @@
  */
 
 char ufSets[MaxSize];  // 集合元素数组
-// s[] 父结点的索引数组
+// parent[] 父结点的索引数组
 
 // 初始化并查集
-void Initial(int s[], int len) {
+void Initial(int parent[], int len) {
     for (int i = 0; i < len; i++) {
-        s[i] = -1;
+        parent[i] = -1;
     }
 }
 
 // Find “查”操作，找索引x所属集合（返回x所属根结点索引），最坏时间复杂度：O(n)
-int Find(int s[], int x) {
-    while (s[x] >= 0) {
-        x = s[x];
+int Find(int parent[], int x) {
+    while (parent[x] >= 0) {
+        x = parent[x];
     }
     return x;
 }
@@ -29,23 +29,23 @@ int Find(int s[], int x) {
 // 如果指定的两个元素不是根节点，要合并这两个元素从属的集合，需要先“查”确定两个元素各自的根节点，然后再对两个根节点进行“并”
 // Union “并”操作，将两个集合合并为一个,时间复杂度：O(1)
 // 将 n 个独立的元素通过多次 union 合并为一个集合——O(n^2)
-void Union(int s[], int root1, int root2) {
+void Union(int parent[], int root1, int root2) {
     if (root1 == root2) {
         return;
     }
 
     // 合并
-    s[root2] = root1;
+    parent[root2] = root1;
 }
 
-void printidx(int s[]) {
+void printidx(int parent[]) {
     printf("--------------\n");
     for (int i = 0; i < MaxSize; i++) {
         printf("%c\t", ufSets[i]);
     }
     printf("\n");
     for (int i = 0; i < MaxSize; i++) {
-        printf("%d\t", s[i]);
+        printf("%d\t", parent[i]);
     }
     printf("\n");
 }
@@ -62,17 +62,17 @@ Find的最坏时间复杂度从 O(n) 变为 O(logn)
 
 // 将 n 个独立的元素通过多次 union 合并为一个集合——O(nlogn)
  */
-void Union2(int s[], int root1, int root2) {
+void Union2(int parent[], int root1, int root2) {
     if (root1 == root2) {
         return;
     }
 
-    if (s[root1] > s[root2]) {  // -2 > -5, root1 的节点更少
-        s[root2] += s[root1];
-        s[root1] = root2;  // 小树合并到大树
+    if (parent[root1] > parent[root2]) {  // -2 > -5, root1 的节点更少
+        parent[root2] += parent[root1];
+        parent[root1] = root2;  // 小树合并到大树
     } else {
-        s[root1] += s[root2];
-        s[root2] = root1;  // 小树合并到大树
+        parent[root1] += parent[root2];
+        parent[root2] = root1;  // 小树合并到大树
     }
 }
 
@@ -83,15 +83,15 @@ Find操作的优化（压缩路径）
 
 // 将 n 个独立的元素通过多次 union 合并为一个集合——O(nα(n))
  */
-int Find2(int s[], int x) {
+int Find2(int parent[], int x) {
     int root = x;
-    while (s[root] >= 0) {
-        root = s[root];
+    while (parent[root] >= 0) {
+        root = parent[root];
     }
 
     while (x != root) {
-        int tmp = s[x];
-        s[x] = root;  // 直接链接到根结点
+        int tmp = parent[x];
+        parent[x] = root;  // 直接链接到根结点
         x = tmp;
     }
 
@@ -104,22 +104,22 @@ void testing() {
         ufSets[i] = elements[i];
     }
 
-    int s[MaxSize];
-    Initial(s, MaxSize);
-    printidx(s);
+    int parent[MaxSize];
+    Initial(parent, MaxSize);
+    printidx(parent);
 
-    Union(s, 0, 1);
-    Union(s, 0, 2);
+    Union(parent, 0, 1);
+    Union(parent, 0, 2);
 
-    Union(s, 3, 4);
-    printidx(s);
+    Union(parent, 3, 4);
+    printidx(parent);
 
-    printf("root: %d\n", Find(s, 2));
-    printf("root: %d\n", Find(s, 3));
+    printf("root: %d\n", Find(parent, 2));
+    printf("root: %d\n", Find(parent, 3));
 
-    Union(s, 0, 3);
-    printidx(s);
-    printf("root: %d\n", Find(s, 4));
+    Union(parent, 0, 3);
+    printidx(parent);
+    printf("root: %d\n", Find(parent, 4));
 }
 
 int main(int argc, char const* argv[]) {

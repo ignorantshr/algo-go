@@ -1,9 +1,11 @@
 package leetcode
 
-import "sort"
+import (
+	"sort"
+)
 
 type compareEle interface {
-	int | string
+	~int | ~string | ~byte
 }
 
 // 集合相等
