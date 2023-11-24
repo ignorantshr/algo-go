@@ -157,7 +157,7 @@ void walk(BSTree t) {
 
 void testing() {
     int arr[10] = {5, 2, 8, 1, 3, 4, 6, 7, 9, 10};
-    BSTree t;
+    BSTree t = NULL;
     Creat_BST(&t, arr, 10);
     walk(t);
     printf("\n");
