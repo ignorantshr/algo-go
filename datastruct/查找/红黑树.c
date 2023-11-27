@@ -279,13 +279,14 @@ void inorderTraversal(RBnode* node) {
     inorderTraversal(node->rchild);
 }
 
-void printTreeShape(RBTree root, int level) {
+// 横向展开打印
+void printTreeHorizontal(RBTree root, int level) {
     // if (root == NULL) {
     //     return;
     // }
 
     if (root != NULL) {
-        printTreeShape(root->rchild, level + 1);
+        printTreeHorizontal(root->rchild, level + 1);
     }
 
     for (int i = 0; i < level; i++) {
@@ -299,7 +300,7 @@ void printTreeShape(RBTree root, int level) {
     }
 
     if (root != NULL) {
-        printTreeShape(root->lchild, level + 1);
+        printTreeHorizontal(root->lchild, level + 1);
     }
 }
 
@@ -321,7 +322,8 @@ int lvls[10];
 char* lines[10];
 int height;
 int pos[10][100];  // i 层 j 个结点的位置
-int gap = 5;
+const int gap = 3;
+char null[gap + 1];
 
 int treeHeight(RBTree t) {
     if (t == NULL) {
@@ -332,44 +334,36 @@ int treeHeight(RBTree t) {
 }
 
 int bottomNum(RBTree node, int level) {
-    // 找到祖先结点中比自己小的，取其一半
-    int n = 0;
-    int v = 0;
-    if (node != NULL) {
-        v = node->key;
-    }
-    while (node != NULL) {
-        if (node->key <= v) {
-            n += pow(2, height - level - 1) / 2;
-        }
-        level--;
-        node = node->parent;
-    }
-
-    return n;
+    int n = pow(2, height - 1);  // 底层结点总数
+    int splitn = pow(2, level);  // 当前层结点总数
+    int per = n / splitn;        // 划分
+    int i = lvls[level];         // 当前层第几个结点
+    return i * per +
+           per / 2;  // 计算底层结点比自己小的结点数 i * per + per/2, i from 0
 }
 
-int brotherPos(RBTree node, int level) {
+int brotherPos(int level) {
     if (lvls[level] == 0) {
         return 0;
     }
     return pos[level][lvls[level] - 1];
 }
 
-void printTreeFlat(RBTree root, int level, int h) {
+// 横向展开打印
+void printTreeVertical(RBTree root, int level, int h) {
     int n = powl(2, level);
     char pre[200];
     pre[0] = '\0';
     int bnn = bottomNum(root, level);
-    bnn = bnn * 2 - 1;
-    bnn = bnn > 0 ? bnn : 0;
+    bnn = level == height - 1 ? bnn * 2 : bnn * 2 - 1;
     int preCharNum = gap * bnn;
 
-    // 找同层左兄弟结点的位置
-    int bropos = 0;
-    if (root != NULL) {
-        bropos = brotherPos(root, level);
-        preCharNum -= bropos;
+    // 找同层左兄弟结点的尾巴的位置
+    int bropos = brotherPos(level);
+    preCharNum -= bropos;
+    // 防止过长异常
+    if (preCharNum <= 0 && lvls[level] != 0) {
+        preCharNum = gap / 2;
     }
 
     for (int i = 0; i < preCharNum; i++) {
@@ -379,8 +373,7 @@ void printTreeFlat(RBTree root, int level, int h) {
     char tmp[300];
     int l;
     if (root == NULL) {
-        sprintf(tmp, "%s[   ]", pre);
-        l = preCharNum + 5;
+        l = sprintf(tmp, "%s%s", pre, null);
     } else {
         l = sprintf(tmp, "%s%d[%s]", pre, root->key,
                     (root->color == RED ? "R" : "B"));
@@ -388,8 +381,8 @@ void printTreeFlat(RBTree root, int level, int h) {
     tmp[l] = '\0';
     pos[level][lvls[level]] = bropos + l;
 
-    printf("[%d] line[%d] space:%d, l:%d\n", root == NULL ? -1 : root->key,
-           level, preCharNum, l);
+    // printf("[%d] line[%d] space:%d, l:%d\n", root == NULL ? -1 : root->key,
+    //        level, preCharNum, l);
 
     if (lines[level] == NULL) {
         lines[level] = (char*)malloc(preCharNum + l);
@@ -405,27 +398,35 @@ void printTreeFlat(RBTree root, int level, int h) {
         } else {
             // 内存分配失败的处理逻辑
             printf("realloc error\n");
+            exit(1);
         }
-        // strcat(lines[level], tmp);
     }
 
     lvls[level]++;
     if (lvls[level] == n) {
-        printf("line[%d] %lu\n", level, strlen(lines[level]));
-        writeToFile("tree.log", strcat(lines[level], "\n"));
-        // printf("%s\n", lines[level]);
+        // writeToFile("tree.log", strcat(lines[level], "\n"));
+        printf("%s\n", lines[level]);
     }
 
     if (h == height) {
         return;
     }
     if (root == NULL) {
-        printTreeFlat(NULL, level + 1, h + 1);
-        printTreeFlat(NULL, level + 1, h + 1);
+        printTreeVertical(NULL, level + 1, h + 1);
+        printTreeVertical(NULL, level + 1, h + 1);
     } else {
-        printTreeFlat(root->lchild, level + 1, h + 1);
-        printTreeFlat(root->rchild, level + 1, h + 1);
+        printTreeVertical(root->lchild, level + 1, h + 1);
+        printTreeVertical(root->rchild, level + 1, h + 1);
     }
+}
+
+void initPrint(RBTree root) {
+    height = treeHeight(root);
+
+    for (int i = 0; i < gap; i++) {
+        null[i] = 'n';
+    }
+    null[gap] = '\0';
 }
 
 void testing() {
@@ -451,13 +452,13 @@ void testing() {
     t = insert(t, 72);
     t = insert(t, 41);
     printf("------------\n");
-    // printTreeShape(t, 0);
+    // printTreeVertical(t, 0, 1);
     printf("------------\n");
-    height = treeHeight(t);
-    printTreeFlat(t, 0, 1);
+    initPrint(t);
+    printTreeVertical(t, 0, 1);
     // removeNode(&t, 5);
     // printf("------------\n");
-    // printTreeShape(t, 0);
+    // printTreeVertical(t, 0, 1);
 }
 
 int main(int argc, char const* argv[]) {
