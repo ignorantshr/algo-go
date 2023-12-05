@@ -52,7 +52,15 @@ void BFS_MIN_Distance(graph g, int u) {
 }
 
 /* Dijkstra 算法
-无向图的一条无向边可以看成双向的两条有向边。
+算法思想：
+使用一个 d 数组记录距起点的最短距离，
+使用一个 p 数组记录从起点到某个顶点的路径的前驱结点
+每轮循环从 d 中找一个最短的还没被确定的顶点 i，
+然后遍历 i 所有的邻接点，更新它们的最短路径
+    若 d[i] + arc[i][j] < d[j]，说明经过 i 到达 j 比直接到达 j
+要短，那么就更新最短路径信息
+
+虽然适用于有向图，但是可以把无向图的无向边可以看成双向的两条有向边。
 
 从 dist数组可知起点到各个结点的最短路径长度，而检查
 path数组就能得到该最短路径的具体信息
@@ -62,6 +70,7 @@ path数组就能得到该最短路径的具体信息
 O(n^2) 即 O(|V|^2)。经过 n−1轮处理，每次处理时间复杂度为 O(n)+O(n)
  */
 
+// 仅为算法思想体现，不是完整实现
 void Dijkstra_MIN_Distance(graph g, int u, int arcs[10][10]) {
     const int n = g.vexnum;
     int dist[n];
@@ -92,6 +101,14 @@ void Dijkstra_MIN_Distance(graph g, int u, int arcs[10][10]) {
     // 检查所有邻接自 v_i 的顶点
     int neighbors[100];
     int nn = Neighbors(g, i, neighbors);
+    /*
+    n1---1---n2---5---n3
+    n1---9---n3
+
+    n1 = k  起始顶点 u
+    n2 = i  距 u 最小的顶点
+    n3 = j  i 的邻接点
+     */
     for (int m = 0; m < nn; m++) {
         int j = neighbors[m];
         if (final[j] == false && dist[i] + arcs[i][j] < dist[j]) {
