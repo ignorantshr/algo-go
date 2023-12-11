@@ -61,10 +61,8 @@
  */
 package leetcode
 
-import "testing"
-
 // @lc code=start
-
+/*
 func lengthOfLIS(nums []int) int {
 	return lengthOfLISBinarySearch(nums)
 	// return lengthOfLISDp(nums)
@@ -159,3 +157,4 @@ func lengthOfLISDp_RV(nums []int) int {
 	}
 	return m
 }
+*/
