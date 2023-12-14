@@ -13,3 +13,4 @@
 - fg: forget, 忘记
 - us: un-committed, 未提交到 LeetCode 进行验证
 - dk: don't know, 不懂
+- fa: fail, 没做出来
