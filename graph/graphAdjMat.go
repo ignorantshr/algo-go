@@ -16,13 +16,13 @@ type graphAdjMat struct {
 	adjMat [][]int
 }
 
-func NewGraphAdjMat(edges [][2]int) *graphAdjMat {
+func NewGraphAdjMat(edges [][3]int) *graphAdjMat {
 	g := new(graphAdjMat)
 	g.verIndex = make(map[int]int)
 	for _, v := range edges {
 		g.AddVertex(v[0])
 		g.AddVertex(v[1])
-		g.AddEdge(v[0], v[1])
+		g.AddEdge(v[0], v[1], v[2])
 	}
 	return g
 }
@@ -66,7 +66,7 @@ func (g *graphAdjMat) DelVertex(v int) {
 	g.adjMat = append(g.adjMat[:i], g.adjMat[i+1:]...)
 }
 
-func (g *graphAdjMat) AddEdge(from, to int) {
+func (g *graphAdjMat) AddEdge(from, to, w int) {
 	if from == to {
 		return
 	}
@@ -79,8 +79,8 @@ func (g *graphAdjMat) AddEdge(from, to int) {
 	if !ok {
 		return
 	}
-	g.adjMat[i][j] = 1
-	g.adjMat[j][i] = 1
+	g.adjMat[i][j] = w
+	g.adjMat[j][i] = w
 }
 
 func (g *graphAdjMat) DelEdge(from, to int) {

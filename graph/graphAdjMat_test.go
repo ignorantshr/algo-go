@@ -5,11 +5,11 @@ import (
 )
 
 func TestNewGraphAdjMat(t *testing.T) {
-	g := NewGraphAdjMat([][2]int{{5, 2}, {2, 4}, {1, 3}})
+	g := NewGraphAdjMat([][3]int{{5, 2, 1}, {2, 4, 1}, {1, 3, 1}})
 	g.AddVertex(6)
 	g.AddVertex(6)
-	g.AddEdge(4, 6)
-	g.AddEdge(5, 6)
+	g.AddEdge(4, 6, 1)
+	g.AddEdge(5, 6, 1)
 	g.Println()
 
 	g.DelVertex(2)
