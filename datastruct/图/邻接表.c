@@ -3,14 +3,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MaxVertexNum 100
+#define MaxVertexNum 5
 typedef char VertexType;  // 顶点的数据类型
 
 // 边/弧
 typedef struct ArcNode {
-    int adjvex;            // 顶点编号（索引）
+    int adjvex;            // 顶点编号（vertices 的索引）
     struct ArcNode* next;  // 指向下一条弧的指针
-    // PowerType power;      //边权值
+    int power;             // 边权值
 } ArcNode;
 
 // 顶点
@@ -19,7 +19,7 @@ typedef struct VNode {
     ArcNode* first;   // 第一条边/弧
 } VNode, AdjList[MaxVertexNum];
 
-// 用邻接表存储的图
+// 用邻接表（adjacency table）存储的图
 typedef struct {
     AdjList vertices;  // 邻接表
     int vexnum, arcnum;

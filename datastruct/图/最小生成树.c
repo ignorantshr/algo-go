@@ -1,8 +1,12 @@
+#include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "graph.h"
+#include "ufset.c"
+
+#define INF 99999
 
 /* 对于一个带权连通无向图
 G=(V,E)，生成树不同，每棵树的权（即树中所有边上的权值之和）也可能不同。设R 为G
@@ -33,6 +37,44 @@ G=(V,E)，生成树不同，每棵树的权（即树中所有边上的权值之�
 ，即O(|V|^2)，适合用于边稠密图。
 */
 
+int Prim(graph* g) {
+    int dist[MAXSIZE];
+    int visited[MAXSIZE];
+
+    for (int i = 0; i < MAXSIZE; i++) {
+        dist[i] = g->edges[0][i];
+        visited[i] = 0;
+    }
+    visited[0] = 1;  // 把一个顶点加入树
+
+    for (int c = 1; c < MAXSIZE; c++) {  // 已经加入一个了，还需要循环 size-1 轮
+        int pos = 0;
+        int min = INF;
+        for (int i = 0; i < MAXSIZE; i++) {
+            if (!visited[i] && dist[i] < min) {  // 找一个代价最小的顶点加入树中
+                pos = i;
+                min = dist[i];
+            }
+        }
+
+        visited[pos] = 1;
+        for (int j = 0; j < MAXSIZE; j++) {
+            // 这里更新的是 从刚刚纳入树中的顶点 直接到达 邻接点的最短路径
+            // dist
+            // 存储的是两个顶点之间的距离，而不是从某个固定的顶点到达的路径，
+            // 注意与 Dijiskra 区分
+            if (!visited[j] && g->edges[pos][j] < dist[j]) {
+                dist[j] = g->edges[pos][j];
+            }
+        }
+    }
+    int sum = 0;
+    for (int i = 0; i < MAXSIZE; i++) {
+        sum += dist[i];
+    }
+    return sum;
+}
+
 /* Kruskal（克鲁斯卡尔）算法
 
 每次选择一条权值最小的边，使这条边的两头连通（原本已经连通的就不选）；直到所有结点都连通（所谓连通就是两点属于同一个集合）。
@@ -45,3 +87,77 @@ G=(V,E)，生成树不同，每棵树的权（即树中所有边上的权值之�
 O(log_2|E|)（并查集的时间复杂度）， 总的时间复杂度为
 O(|E|log_2|E|)，适合用于边稀疏图
  */
+
+typedef struct edge {
+    int v1, v2;
+    int weight;
+} edge;
+
+int Kruskal(graph* g) {
+    edge* edges[MAXSIZE * MAXSIZE];
+    int count = 0;
+    // insert sort
+    for (int i = 0; i < MAXSIZE; i++) {
+        for (int j = 0; j < MAXSIZE; j++) {
+            if (i == j) {
+                continue;
+            }
+
+            if (g->edges[i][j] != INF) {
+                edge* e = malloc(sizeof(edge));
+                e->v1 = i;
+                e->v2 = j;
+                e->weight = g->edges[i][j];
+                edges[count] = e;
+
+                if (count > 0 &&
+                    edges[count - 1]->weight > edges[count]->weight) {
+                    edge* tmp = edges[count];
+                    int k = count;
+                    for (; k > 0 && edges[k - 1]->weight > tmp->weight; k--) {
+                        edges[k] = edges[k - 1];
+                    }
+                    edges[k] = tmp;
+                }
+                count++;
+            }
+        }
+    }
+
+    int sum = 0;
+    ufset* uf = initial();
+    for (int i = 0; i < count; i++) {
+        if (Find(uf, edges[i]->v1) != Find(uf, edges[i]->v2)) {
+            sum += edges[i]->weight;
+            Union(uf, edges[i]->v1, edges[i]->v2);
+        }
+    }
+
+    return sum;
+}
+
+void testing() {
+    int edges[MAXSIZE][MAXSIZE] = {{0, 5, INF, 10},
+                                   {INF, 0, 3, INF},
+                                   {INF, INF, 0, 1},
+                                   {INF, INF, INF, 0}};
+    graph g = {.vexnum = MAXSIZE};
+    for (int i = 0; i < MAXSIZE; i++) {
+        for (int j = 0; j < MAXSIZE; j++) {
+            g.edges[i][j] = edges[i][j];
+        }
+    }
+
+    int s1 = Prim(&g);
+    printf("%d\n", s1);
+
+    int s2 = Kruskal(&g);
+    printf("%d\n", s2);
+
+    assert(s1 == s2 && s2 == 9);
+}
+
+int main(int argc, char const* argv[]) {
+    testing();
+    return 0;
+}

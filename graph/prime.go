@@ -10,7 +10,7 @@ import "math"
 从某一个顶点开始构建生成树；每次将代价最小的新顶点纳入生成树，直到所有顶点都纳入为止
 时间复杂度为 O(|V^2|) ，适合用于边稠密图
 */
-func Prime(g graphAdjMat) {
+func Prime(g graphAdjMat) int {
 	// 下面是无向图的解法
 	size := len(g.vertexes)
 	cost := make([]int, size)
@@ -44,9 +44,15 @@ func Prime(g graphAdjMat) {
 		// 遍历顶点的边
 		for i := 0; i < size; i++ {
 			// 如果从自己这里中转比原来的路径更短，那么更新
-			if v := g.adjMat[nidx][i] + cost[nidx]; visited[i] == 0 && g.adjMat[nidx][i] != 0 && v < cost[i] {
+			if v := g.adjMat[nidx][i]; visited[i] == 0 && g.adjMat[nidx][i] != 0 && v < cost[i] {
 				cost[i] = v
 			}
 		}
 	}
+
+	sum := 0
+	for i := 0; i < size; i++ {
+		sum += cost[i]
+	}
+	return sum
 }

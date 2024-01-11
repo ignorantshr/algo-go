@@ -4,14 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MaxVertexNum 100  // 最大顶点数量
-
-typedef struct mGraph {
-    char vex[MaxVertexNum];
-    int edge[MaxVertexNum][MaxVertexNum];
-    int vexnum, arcnum;  // 图的当前顶点数和边数/弧数
-};
-
 /* 图的度
 
 无向图的度

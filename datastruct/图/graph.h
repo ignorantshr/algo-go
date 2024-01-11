@@ -1,6 +1,8 @@
+#define MAXSIZE 4
 
 typedef struct graph {
     int vexnum;
+    int edges[MAXSIZE][MAXSIZE];
 } graph;
 
 // 求图G中顶点x的第一个邻接点,若有则返回顶点号。若x没有邻接点或图中不存在x则返回-1
