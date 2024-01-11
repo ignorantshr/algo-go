@@ -47,7 +47,7 @@ package leetcode
 import "testing"
 
 // @lc code=start
-func search(nums []int, target int) int {
+func search704(nums []int, target int) int {
 	i, j := 0, len(nums)-1
 	for i <= j {
 		mid := i + (j-i)/2
@@ -64,7 +64,7 @@ func search(nums []int, target int) int {
 
 // @lc code=end
 
-func Test_search(t *testing.T) {
+func Test_search704(t *testing.T) {
 	type args struct {
 		nums   []int
 		target int
@@ -93,7 +93,7 @@ func Test_search(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := search(tt.args.nums, tt.args.target); got != tt.want {
+			if got := search704(tt.args.nums, tt.args.target); got != tt.want {
 				t.Errorf("search() = %v, want %v", got, tt.want)
 			}
 		})

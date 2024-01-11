@@ -54,7 +54,7 @@ func findKthNum(k int, nums1, nums2 []int) int {
 }
 
 func resolution1(nums1 []int, nums2 []int) float64 {
-	nums := merge(nums1, nums2)
+	nums := merge4(nums1, nums2)
 	if len(nums) == 0 {
 		return 0
 	}
@@ -68,7 +68,7 @@ func resolution1(nums1 []int, nums2 []int) float64 {
 	}
 }
 
-func merge(nums1 []int, nums2 []int) []int {
+func merge4(nums1 []int, nums2 []int) []int {
 	res := make([]int, len(nums1)+len(nums2))
 	for a, b := 0, 0; a < len(nums1) || b < len(nums2); {
 		if a == len(nums1) {
