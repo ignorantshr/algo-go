@@ -87,15 +87,11 @@ func minDistanceDp(word1 string, word2 string) int {
 			if word1[i-1] == word2[j-1] {
 				dp[i][j] = dp[i-1][j-1]
 			} else {
-				m := min(
+				dp[i][j] = min(
 					dp[i-1][j]+1,   // del word1[i]
 					dp[i-1][j-1]+1, // replace word1[i] with word2[j]
+					dp[i][j-1]+1,   // insert word2[j] after word1[i]
 				)
-				m = min(
-					dp[i][j-1]+1, // insert word2[j] after word1[i]
-					m,
-				)
-				dp[i][j] = m
 			}
 		}
 	}
@@ -157,7 +153,8 @@ func minDistanceDpDfs(word1 string, word2 string) int {
 			dfs(i1-1, i2)+1, // del word1[i1]
 			min(
 				dfs(i1-1, i2-1)+1, // replace word1[i1] with word2[i2]
-				dfs(i1, i2-1)+1),  // insert word2[i2] after word[i]
+				dfs(i1, i2-1)+1,   // insert word2[i2] after word[i]
+			),
 		)
 	}
 
@@ -185,6 +182,65 @@ func Test_minDistance(t *testing.T) {
 			if got := minDistance72(tt.args.word1, tt.args.word2); got != tt.want {
 				t.Errorf("minDistance() = %v, want %v", got, tt.want)
 			}
+			if got := minDistance72Dfs_RV(tt.args.word1, tt.args.word2); got != tt.want {
+				t.Errorf("minDistance72Dfs_RV() = %v, want %v", got, tt.want)
+			}
+			if got := minDistance72Dp_RV(tt.args.word1, tt.args.word2); got != tt.want {
+				t.Errorf("minDistance72Dp_RV() = %v, want %v", got, tt.want)
+			}
 		})
 	}
+}
+
+func minDistance72Dfs_RV(word1 string, word2 string) int {
+	var dfs func(i1, i2 int) int
+	dfs = func(i1, i2 int) int {
+		if i2 == len(word2) {
+			return len(word1) - i1
+		}
+		if i1 == len(word1) {
+			return len(word2) - i2
+		}
+
+		if word1[i1] == word2[i2] {
+			return dfs(i1+1, i2+1)
+		}
+
+		return 1 + min(
+			dfs(i1+1, i2+1), // replace
+			dfs(i1+1, i2),   // del
+			dfs(i1, i2+1),   // insert
+		)
+	}
+
+	return dfs(0, 0)
+}
+
+func minDistance72Dp_RV(word1 string, word2 string) int {
+	dp := make([][]int, len(word1)+1) // word1[:i1-1] word2[:i2-1] 的最少步数
+	for i := 0; i <= len(word1); i++ {
+		dp[i] = make([]int, len(word2)+1)
+	}
+
+	for i := 1; i <= len(word1); i++ {
+		dp[i][0] = i
+		for j := 1; j <= len(word2); j++ {
+			if i == 0 {
+				dp[0][j] = j
+				continue
+			}
+
+			if word1[i-1] == word2[j-1] {
+				dp[i][j] = dp[i-1][j-1]
+			} else {
+				dp[i][j] = 1 + min(
+					dp[i-1][j-1], // replace
+					dp[i-1][j],   // del
+					dp[i][j-1],   // insert
+				)
+			}
+		}
+	}
+
+	return dp[len(word1)][len(word2)]
 }
