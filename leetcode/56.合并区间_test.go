@@ -52,7 +52,7 @@ import (
 )
 
 // @lc code=start
-func merge(intervals [][]int) [][]int {
+func merge56(intervals [][]int) [][]int {
 	// 双指针
 	if len(intervals) == 1 {
 		return intervals
@@ -105,7 +105,7 @@ func mergeIterator(intervals [][]int) [][]int {
 
 // @lc code=end
 
-func Test_merge(t *testing.T) {
+func Test_merge56(t *testing.T) {
 	tests := []struct {
 		name      string
 		intervals [][]int
@@ -122,8 +122,8 @@ func Test_merge(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			dst := make([][]int, len(tt.intervals))
 			copy(dst, tt.intervals)
-			if got := merge(tt.intervals); !equalSliceMatrix(got, tt.want) {
-				t.Errorf("merge() = %v, want %v", got, tt.want)
+			if got := merge56(tt.intervals); !equalSliceMatrix(got, tt.want) {
+				t.Errorf("merge56() = %v, want %v", got, tt.want)
 			}
 			if got := mergeIterator(dst); !equalSliceMatrix(got, tt.want) {
 				t.Errorf("mergeIterator() = %v, want %v", got, tt.want)
