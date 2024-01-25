@@ -56,7 +56,7 @@ import (
  *     Next *ListNode
  * }
  */
-func deleteDuplicates(head *ListNode) *ListNode {
+func deleteDuplicates83(head *ListNode) *ListNode {
 	if head == nil {
 		return nil
 	}
@@ -72,7 +72,7 @@ func deleteDuplicates(head *ListNode) *ListNode {
 	return head
 }
 
-func deleteDuplicates1(head *ListNode) *ListNode {
+func deleteDuplicates83831(head *ListNode) *ListNode {
 	// 快慢指针
 	if head == nil {
 		return nil
@@ -94,7 +94,7 @@ func deleteDuplicates1(head *ListNode) *ListNode {
 
 // @lc code=end
 
-func Test_deleteDuplicates(t *testing.T) {
+func Test_deleteDuplicates83(t *testing.T) {
 	tests := []struct {
 		name string
 		head *ListNode
@@ -111,8 +111,8 @@ func Test_deleteDuplicates(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := deleteDuplicates(tt.head); !got.compare(tt.want) {
-				t.Errorf("deleteDuplicates() = %v, want %v", got, tt.want)
+			if got := deleteDuplicates83(tt.head); !got.compare(tt.want) {
+				t.Errorf("deleteDuplicates83() = %v, want %v", got, tt.want)
 			}
 		})
 	}

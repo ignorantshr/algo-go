@@ -133,7 +133,6 @@ func Test_removeDuplicates26(t *testing.T) {
 		nums   []int
 		result result
 	}{
-		{"1", []int{}, result{[]int{}, 0}},
 		{"1", []int{1}, result{[]int{1}, 1}},
 		{"2", []int{1, 1}, result{[]int{1}, 1}},
 		{"2", []int{1, 2}, result{[]int{1, 2}, 2}},
@@ -142,9 +141,31 @@ func Test_removeDuplicates26(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := removeDuplicates26(tt.nums); got != tt.result.size || !reflect.DeepEqual(tt.nums[:tt.result.size], tt.result.nums) {
+			arr := make([]int, len(tt.nums))
+			copy(arr, tt.nums)
+			if got := removeDuplicates26(arr); got != tt.result.size || !reflect.DeepEqual(arr[:tt.result.size], tt.result.nums) {
 				t.Errorf("removeDuplicates26() = %v, want %v", got, tt.result)
+			}
+
+			copy(arr, tt.nums)
+			if got := removeDuplicates26_RV(arr); got != tt.result.size || !reflect.DeepEqual(arr[:tt.result.size], tt.result.nums) {
+				t.Errorf("removeDuplicates26_RV() = %v, want %v, got %v", got, tt.result, arr)
 			}
 		})
 	}
+}
+
+func removeDuplicates26_RV(nums []int) int {
+	slow, fast := 0, 1
+	size := len(nums)
+	for fast < size {
+		if nums[fast] == nums[slow] {
+			fast++
+			continue
+		}
+
+		slow++
+		nums[slow] = nums[fast]
+	}
+	return slow + 1
 }

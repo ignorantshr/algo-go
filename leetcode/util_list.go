@@ -49,6 +49,20 @@ func (l *ListNode) compare(another *ListNode) bool {
 	return true
 }
 
+func (l *ListNode) Clone() *ListNode {
+	dummy := &ListNode{}
+	pre := dummy
+	cur := l
+	for cur != nil {
+		pre.Next = &ListNode{
+			Val: cur.Val,
+		}
+		pre = pre.Next
+		cur = cur.Next
+	}
+	return dummy.Next
+}
+
 // pos: 环形节点的位置，从 0 开始
 func (l *ListNode) buildCycle(pos int) *ListNode {
 	if pos < 0 {

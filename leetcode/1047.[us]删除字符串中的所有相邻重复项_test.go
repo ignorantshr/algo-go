@@ -23,11 +23,11 @@ import "testing"
 
 // @lc code=start
 
-func removeDuplicates(s string) string {
-	return removeDuplicatesPoints(s)
+func removeDuplicates1047(s string) string {
+	return removeDuplicates1047Points(s)
 }
 
-func removeDuplicatesStack(s string) string {
+func removeDuplicates1047Stack(s string) string {
 	stack := []rune{}
 	for _, r := range s {
 		if len(stack) > 0 && stack[len(stack)-1] == r {
@@ -39,7 +39,7 @@ func removeDuplicatesStack(s string) string {
 	return string(stack)
 }
 
-func removeDuplicatesPoints(s string) string {
+func removeDuplicates1047Points(s string) string {
 	// 双指针模拟栈
 	slow, fast := 0, 0
 	sbytes := []byte(s)
@@ -58,7 +58,7 @@ func removeDuplicatesPoints(s string) string {
 
 // @lc code=end
 
-func Test_removeDuplicates(t *testing.T) {
+func Test_removeDuplicates1047(t *testing.T) {
 	tests := []struct {
 		name string
 		s    string
@@ -74,8 +74,8 @@ func Test_removeDuplicates(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := removeDuplicates(tt.s); got != tt.want {
-				t.Errorf("removeDuplicates() = %v, want %v", got, tt.want)
+			if got := removeDuplicates1047(tt.s); got != tt.want {
+				t.Errorf("removeDuplicates1047() = %v, want %v", got, tt.want)
 			}
 		})
 	}

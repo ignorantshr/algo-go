@@ -63,7 +63,7 @@ package leetcode
 import "testing"
 
 // @lc code=start
-func search(nums []int, target int) int {
+func search33(nums []int, target int) int {
 	i, j := 0, len(nums)-1
 	for i <= j {
 		mid := (i + j) >> 1
@@ -71,6 +71,7 @@ func search(nums []int, target int) int {
 			return mid
 		}
 
+		// 首先判断 [l, mid] 和 [mid + 1, r] 哪个部分是有序的
 		if nums[i] <= nums[mid] {
 			if nums[i] <= target && target < nums[mid] { // 左边有序且 target 位于左边
 				j = mid - 1
@@ -88,7 +89,7 @@ func search(nums []int, target int) int {
 	return -1
 }
 
-func search1(nums []int, target int) int {
+func search331(nums []int, target int) int {
 	first := nums[0]
 	last := nums[len(nums)-1]
 	if target < first && target > last {
@@ -146,7 +147,7 @@ func search1(nums []int, target int) int {
 
 // @lc code=end
 
-func Test_search(t *testing.T) {
+func Test_search33(t *testing.T) {
 	type args struct {
 		nums   []int
 		target int
@@ -211,9 +212,20 @@ func Test_search(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := search(tt.args.nums, tt.args.target); got != tt.want {
-				t.Errorf("search() = %v, want %v", got, tt.want)
+			if got := search33(tt.args.nums, tt.args.target); got != tt.want {
+				t.Errorf("search33() = %v, want %v", got, tt.want)
+			}
+		})
+
+		t.Run(tt.name, func(t *testing.T) {
+			if got := search33_RV(tt.args.nums, tt.args.target); got != tt.want {
+				t.Errorf("search33_RV() = %v, want %v", got, tt.want)
 			}
 		})
 	}
+}
+
+// fail
+func search33_RV(nums []int, target int) int {
+	return -1
 }
