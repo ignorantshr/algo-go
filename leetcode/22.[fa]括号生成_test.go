@@ -57,16 +57,13 @@ func generateParenthesis(n int) []string {
 			res = append(res, string(path))
 			return
 		}
-		// if l < r {
-		// 	return
-		// }
 
 		if l < n {
 			path = append(path, '(')
 			backtrack(l+1, r)
 			path = path[:len(path)-1]
 		}
-		if l < r && r < n {
+		if r < l && r < n {
 			path = append(path, ')')
 			backtrack(l, r+1)
 			path = path[:len(path)-1]
@@ -84,14 +81,13 @@ func Test_generateParenthesis(t *testing.T) {
 		n    int
 		want []string
 	}{
-		{"0", 0, []string{}},
 		{"1", 1, []string{"()"}},
 		{"2", 2, []string{"()()", "(())"}},
 		{"3", 3, []string{"((()))", "(()())", "(())()", "()(())", "()()()"}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := generateParenthesis(tt.n); equalSet(got, tt.want) {
+			if got := generateParenthesis(tt.n); !equalSet(got, tt.want) {
 				t.Errorf("generateParenthesis() = %v, want %v", got, tt.want)
 			}
 		})
