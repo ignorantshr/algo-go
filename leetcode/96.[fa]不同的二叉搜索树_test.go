@@ -47,9 +47,9 @@ import "testing"
 // @lc code=start
 func numTrees(n int) int {
 	// 动态规划
+	// f(i,n) = g(i-1)*g(n-i), 1 <= i <= n， 以 i 为根、序列长度为 n 的不同二叉搜索树个数
 	// g(n) = ∑f(i,n), 1 <= i <= n
-	// f(i,n) = g(i-1)*g(n-i), 1 <= i <= n
-	// g(n) =∑g(i-1)*g(n-i), 1 <= i <= n
+	// g(n) =∑{g(i-1)*g(n-i)}, 1 <= i <= n
 	g := make([]int, n+1)
 	g[0], g[1] = 1, 1
 	for i := 2; i <= n; i++ {
@@ -58,6 +58,25 @@ func numTrees(n int) int {
 		}
 	}
 	return g[n]
+}
+
+func numTrees1(n int) int {
+	// 可用记忆化搜索优化
+	var dfs func(start, end int) int
+	dfs = func(start, end int) int {
+		if start >= end {
+			return 1
+		}
+
+		ans := 0
+		for i := start; i <= end; i++ {
+			ln := dfs(start, i-1)
+			rn := dfs(i+1, end)
+			ans += ln * rn
+		}
+		return ans
+	}
+	return dfs(1, n)
 }
 
 // @lc code=end
@@ -78,6 +97,9 @@ func Test_numTrees(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := numTrees(tt.n); got != tt.want {
 				t.Errorf("numTrees() = %v, want %v", got, tt.want)
+			}
+			if got := numTrees1(tt.n); got != tt.want {
+				t.Errorf("numTrees1() = %v, want %v", got, tt.want)
 			}
 		})
 	}
