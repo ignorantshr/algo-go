@@ -74,6 +74,7 @@ func dfsNodes(root *node, order int) []*node {
 }
 
 // mirrorsDfsInOrder 是一个 mirrors 遍历算法，用于进行中序遍历
+// 本质就是兜圈子回到父结点，然后再遍历右子树
 func mirrorsDfsInOrder(root *node) []int {
 	var res []int
 	cur := root
@@ -84,7 +85,7 @@ func mirrorsDfsInOrder(root *node) []int {
 			cur = cur.right              // 移动到右子节点
 		} else {
 			pre := cur.left
-			if pre.right != nil && pre.right != cur { // 找到前驱节点
+			for pre.right != nil && pre.right != cur { // 找到前驱节点
 				pre = pre.right
 			}
 
