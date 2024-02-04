@@ -177,3 +177,25 @@ func (t *TreeNode) bfsPrefix() []any {
 	}
 	return res
 }
+
+func (t *TreeNode) isAVL() bool {
+	var height func(root *TreeNode) (bool, int)
+	height = func(root *TreeNode) (bool, int) {
+		if root == nil {
+			return true, 0
+		}
+
+		okl, lefth := height(root.Left)
+		if !okl {
+			return false, -1
+		}
+		okr, righth := height(root.Right)
+		if !okr {
+			return false, -1
+		}
+		return math.Abs(float64(lefth-righth)) <= 1, max(lefth, righth) + 1
+	}
+
+	banlance, _ := height(t)
+	return banlance
+}
