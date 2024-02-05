@@ -86,7 +86,7 @@ import (
  * }
  */
 
-func connect(root *Node) *Node {
+func connect116(root *Node) *Node {
 	if root == nil {
 		return nil
 	}
@@ -128,7 +128,7 @@ func connectRecurrence(n *Node, depth int, nodes map[int][]*Node) {
 
 // @lc code=end
 
-func Test_connect(t *testing.T) {
+func Test_connect116(t *testing.T) {
 	tests := []struct {
 		name string
 		root *Node
@@ -138,8 +138,8 @@ func Test_connect(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := connect(tt.root); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("connect() = %v, want %v", got, tt.want)
+			if got := connect116(tt.root); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("connect116() = %v, want %v", got, tt.want)
 			}
 		})
 	}

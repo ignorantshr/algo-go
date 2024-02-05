@@ -66,6 +66,7 @@ import (
 )
 
 // @lc code=start
+// 所有的组合结果
 func combinationSum(candidates []int, target int) [][]int {
 	res := make([][]int, 0)
 	path := make([]int, 0)
@@ -80,9 +81,9 @@ func combinationSum(candidates []int, target int) [][]int {
 			res = append(res, tmp)
 			return
 		}
-		if sum > target {
-			return
-		}
+		// if sum > target {
+		// 	return
+		// }
 
 		for i := startIdx; i < len(candidates); i++ {
 			if candidates[i]+sum > target { // 小优化，排序之后无需判断后面的元素了
@@ -90,7 +91,7 @@ func combinationSum(candidates []int, target int) [][]int {
 			}
 			path = append(path, candidates[i])
 			sum += candidates[i]
-			backtrack(startIdx + 1)
+			backtrack(i)
 			path = path[:len(path)-1]
 			sum -= candidates[i]
 		}
@@ -99,7 +100,36 @@ func combinationSum(candidates []int, target int) [][]int {
 	return res
 }
 
-func permuteRepeat(nums []int) [][]int {
+// @lc code=end
+
+func Test_combinationSum(t *testing.T) {
+	type args struct {
+		candidates []int
+		target     int
+	}
+	tests := []struct {
+		name string
+		args args
+		want [][]int
+	}{
+		{"1", args{[]int{2, 3, 6, 7}, 7}, [][]int{{2, 2, 3}, {7}}},
+		{"1", args{[]int{2, 3, 5}, 8}, [][]int{{2, 2, 2, 2}, {2, 3, 3}, {3, 5}}},
+		{"1", args{[]int{2, 1}, 0}, [][]int{{}}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := combinationSum(tt.args.candidates, tt.args.target); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("combinationSum() = %v, want %v", got, tt.want)
+			}
+			if got := combinationSum_RV(tt.args.candidates, tt.args.target); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("combinationSum() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+// 所有的排列结果
+func PermutationRepeat(nums []int) [][]int {
 	var res [][]int
 	track := []int{}
 
@@ -131,31 +161,6 @@ func permuteRepeat(nums []int) [][]int {
 	return res
 }
 
-// @lc code=end
-
-func Test_combinationSum(t *testing.T) {
-	type args struct {
-		candidates []int
-		target     int
-	}
-	tests := []struct {
-		name string
-		args args
-		want [][]int
-	}{
-		{"1", args{[]int{2, 3, 6, 7}, 7}, [][]int{{2, 2, 3}, {7}}},
-		{"1", args{[]int{2, 3, 5}, 8}, [][]int{{2, 2, 2, 2}, {2, 3, 3}, {3, 5}}},
-		{"1", args{[]int{2, 1}, 0}, [][]int{{}}},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := combinationSum_RV(tt.args.candidates, tt.args.target); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("combinationSum() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
 func Test_permuteRepeat(t *testing.T) {
 	tests := []struct {
 		name string
@@ -172,7 +177,7 @@ func Test_permuteRepeat(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := permuteRepeat(tt.nums); !reflect.DeepEqual(got, tt.want) {
+			if got := PermutationRepeat(tt.nums); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("permuteRepeat() = %v, want %v", got, tt.want)
 			}
 		})
