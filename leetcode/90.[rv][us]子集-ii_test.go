@@ -67,6 +67,7 @@ func subsetsWithDup(nums []int) [][]int {
 		res = append(res, tmp)
 
 		for i := startIdx; i < len(nums); i++ {
+			// 剪枝逻辑，值相同的相邻树枝，只遍历第一条
 			if i != startIdx && nums[i] == nums[i-1] {
 				continue
 			}
@@ -94,8 +95,11 @@ func Test_subsetsWithDup(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := subsetsWithDup_RV(tt.nums); !equalSetMatrix(got, tt.want) {
+			if got := subsetsWithDup(tt.nums); !equalSetMatrix(got, tt.want) {
 				t.Errorf("subsetsWithDup() = %v, want %v", got, tt.want)
+			}
+			if got := subsetsWithDup_RV(tt.nums); !equalSetMatrix(got, tt.want) {
+				t.Errorf("subsetsWithDup_RV() = %v, want %v", got, tt.want)
 			}
 		})
 	}

@@ -61,20 +61,47 @@ func permute(nums []int) [][]int {
 	var choose func(path []int, l int)
 	choose = func(path []int, l int) {
 		if len(nums) == l {
-			// fmt.Println("result", path, options[l:])
 			tmp := make([]int, len(path))
 			copy(tmp, path)
 			res = append(res, tmp)
 			return
 		}
 
-		// fmt.Println("choose a path", path, options[l:])
 		for i := l; i < len(nums); i++ {
 			path = append(path, nums[i])
 			nums[i], nums[l] = nums[l], nums[i]
 			choose(path, l+1)
 			nums[l], nums[i] = nums[i], nums[l]
 			path = path[:len(path)-1]
+		}
+	}
+
+	choose([]int{}, 0)
+	return res
+}
+
+func permute1(nums []int) [][]int {
+	res := make([][]int, 0)
+	used := make([]bool, len(nums))
+	var choose func(path []int, l int)
+	choose = func(path []int, l int) {
+		if len(nums) == l {
+			tmp := make([]int, len(path))
+			copy(tmp, path)
+			res = append(res, tmp)
+			return
+		}
+
+		for i := 0; i < len(nums); i++ {
+			if used[i] {
+				continue
+			}
+
+			path = append(path, nums[i])
+			used[i] = true
+			choose(path, l+1)
+			path = path[:len(path)-1]
+			used[i] = false
 		}
 	}
 
@@ -96,8 +123,14 @@ func Test_permute(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := permute_RV(tt.nums); !equalSliceMatrix(got, tt.want) {
+			if got := permute(tt.nums); !equalSetMatrix(got, tt.want) {
 				t.Errorf("permute() = %v, want %v", got, tt.want)
+			}
+			if got := permute1(tt.nums); !equalSetMatrix(got, tt.want) {
+				t.Errorf("permute1() = %v, want %v", got, tt.want)
+			}
+			if got := permute_RV(tt.nums); !equalSetMatrix(got, tt.want) {
+				t.Errorf("permute_RV() = %v, want %v", got, tt.want)
 			}
 		})
 	}
