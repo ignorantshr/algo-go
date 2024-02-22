@@ -120,7 +120,7 @@ func isPalindromeReverseHalf(x int) bool {
 	return x == y || x == y/10
 }
 
-func Test_isPalindrome(t *testing.T) {
+func Test_isPalindrome9(t *testing.T) {
 	tests := []struct {
 		name string
 		x    int

@@ -59,7 +59,7 @@ import (
  *     Next *ListNode
  * }
  */
-func isPalindrome(head *ListNode) bool {
+func isPalindrome234(head *ListNode) bool {
 	return isPalindromePointer(head)
 }
 
@@ -158,7 +158,7 @@ func Test_isPalindrome234(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := isPalindrome(tt.head); got != tt.want {
+			if got := isPalindrome234(tt.head); got != tt.want {
 				t.Errorf("isPalindrome() = %v, want %v", got, tt.want)
 			}
 		})
